@@ -34,8 +34,8 @@
   --ok-soft:rgba(59,197,114,.15);--warn-soft:rgba(229,162,74,.15);
   --late-soft:rgba(249,115,22,.15);--crit-soft:rgba(232,93,44,.15);
   --accent:#2A8C84;--accent-hover:#329A91;--accent-active:#237770;
-  --accent-soft:#123633;--accent-soft-2:rgba(42,140,132,.10);
-  --accent-border:rgba(42,140,132,.22);--accent-glow:rgba(42,140,132,.12);
+  --accent-soft:#1A4540;--accent-soft-2:rgba(42,140,132,.10);
+  --accent-border:rgba(42,140,132,.28);--accent-glow:rgba(42,140,132,.15);
   --sh1:0 1px 2px rgba(0,0,0,.22),0 4px 12px rgba(0,0,0,.10);
   --sh2:0 2px 6px rgba(0,0,0,.28),0 12px 28px rgba(0,0,0,.14);
 }
@@ -48,8 +48,8 @@
     --ok-soft:rgba(59,197,114,.15);--warn-soft:rgba(229,162,74,.15);
     --late-soft:rgba(249,115,22,.15);--crit-soft:rgba(232,93,44,.15);
     --accent:#2A8C84;--accent-hover:#329A91;--accent-active:#237770;
-    --accent-soft:#123633;--accent-soft-2:rgba(42,140,132,.10);
-    --accent-border:rgba(42,140,132,.22);--accent-glow:rgba(42,140,132,.12);
+    --accent-soft:#1A4540;--accent-soft-2:rgba(42,140,132,.10);
+    --accent-border:rgba(42,140,132,.28);--accent-glow:rgba(42,140,132,.15);
     --sh1:0 1px 2px rgba(0,0,0,.22),0 4px 12px rgba(0,0,0,.10);
     --sh2:0 2px 6px rgba(0,0,0,.28),0 12px 28px rgba(0,0,0,.14);
   }
@@ -62,8 +62,9 @@ input,select,textarea{font-size:16px!important;font-family:inherit}
 button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
 #app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
 /* APP BAR */
-.app-bar{background:var(--card);border-bottom:1px solid var(--border);padding:max(12px,calc(env(safe-area-inset-top)+10px)) 16px 10px;flex-shrink:0;z-index:20}
-.bar-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.app-bar{background:var(--card);border-bottom:1px solid var(--border);padding:max(12px,calc(env(safe-area-inset-top)+10px)) 16px max(10px,calc(env(safe-area-inset-top)+8px));flex-shrink:0;z-index:20;transition:box-shadow .15s}
+.app-bar.scrolled{box-shadow:var(--sh2)}
+.bar-top{display:flex;align-items:center;gap:8px}
 .brand{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--ink);flex-shrink:0}
 .brand em{color:var(--accent);font-style:normal;font-weight:400;font-size:14px;vertical-align:middle;margin:0 1px}
 .sr-pill{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 5px;color:var(--ink);font-size:13px;font-weight:600;min-width:0;transition:background .12s;cursor:pointer}
@@ -111,12 +112,12 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
 /* EQ CARDS (no outlet) */
 .eq-cards{display:flex;flex-direction:column;gap:8px;padding:10px 16px}
-.eq-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
+.eq-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:13px 14px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
 .eq-card:active{background:var(--card-2);border-color:var(--border-2)}
 .eq-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
 .eq-card-name{font-size:13px;font-weight:700;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:10px}
 .eq-card-right{text-align:right;flex-shrink:0}
-.eq-card-cnt{font-size:18px;font-weight:800;color:var(--ink);line-height:1.1}
+.eq-card-cnt{font-size:24px;font-weight:800;color:var(--ink);line-height:1.1;letter-spacing:-1px}
 .eq-card-unit{font-size:10px;color:var(--muted)}
 .eq-card-sub{font-size:11px;color:var(--muted);margin-bottom:8px}
 .eq-card-dots{display:flex;align-items:center;gap:10px}
@@ -131,8 +132,8 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .ph-dot-it{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700}
 .ph-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 /* GUID styled container */
-.guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rxs);padding:7px 10px;width:100%;max-width:300px}
-.guid-text{font-size:10px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
+.guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border-radius:var(--rxs);padding:5px 10px;width:100%;max-width:300px}
+.guid-text{font-size:9px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
 /* QR count badge */
 .qr-count-badge{background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted)}
 /* MINI BAR */
@@ -147,9 +148,8 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .pl-it{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink-2)}
 .pl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .ov-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.ov-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--sh1)}
 .ov-tile-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px}
-.ov-tile-val{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.5px}
+.ov-tile-val{font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-1px}
 .prob-list{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
 .prob-row{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:var(--sh1);transition:border-color .12s,background .12s}
 .prob-row:active{background:var(--card-2);border-color:var(--border-2)}
@@ -172,7 +172,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .ph-list{display:flex;flex-direction:column;gap:6px;padding:10px 16px}
 .ph-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
 .ph-card:active{background:var(--card-2);border-color:var(--border-2)}
-.ph-card.sel{border:1.5px solid var(--accent);background:var(--accent-soft)}
+.ph-card.sel{border:1.5px solid var(--accent);background:var(--bg-soft)}
 .ph-card-l{flex-shrink:0;display:flex;flex-direction:column;gap:5px}
 .ph-card-i{flex:1;min-width:0}
 .ph-card-addr{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;word-break:break-word}
@@ -226,7 +226,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 /* SHEETS */
 .sh-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:flex-end}
 .sh-bg.open{display:flex}
-.sh-box{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + var(--sab))}
+.sh-box{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + var(--sab));box-shadow:0 -4px 20px rgba(0,0,0,.10)}
 .sh-grip-w{padding:10px 0 4px;display:flex;justify-content:center;cursor:grab;flex-shrink:0}
 .sh-grip{width:36px;height:4px;background:var(--border-2);border-radius:2px}
 .sh-head{display:flex;justify-content:space-between;align-items:center;padding:0 16px 10px;border-bottom:1px solid var(--border)}
@@ -235,7 +235,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .sh-sec{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 16px 6px}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 8px}
 .chip{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--card);color:var(--ink-2);transition:all .12s}
-.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chip.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 .sh-reset{display:block;width:calc(100% - 32px);margin:8px 16px 0;padding:11px;border-radius:var(--rs);border:1px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
 .sh-reset:active{background:var(--bg-soft)}
 .sr-opt{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;color:var(--ink-2)}
@@ -249,6 +249,33 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .eq-det-row:active{background:var(--bg-soft)}
 .eq-det-addr{flex:1;font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eq-det-meta{font-size:11px;color:var(--muted)}
+
+/* PULSE BAR */
+.pulse-bar{display:flex;align-items:center;padding:0 16px;height:36px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.pulse-bar::-webkit-scrollbar{display:none}
+.pb-pills{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.pb-pill{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.pb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pb-cnt{font-size:13px;font-weight:800;letter-spacing:-.3px}
+.pb-lbl{font-size:10px;font-weight:600;color:var(--muted)}
+.pb-period{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--muted-2);flex-shrink:0;margin-left:auto;padding-left:8px}
+/* TILE SUB */
+.ov-tile{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--sh1)}
+.ov-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent-soft-2)}
+.ov-tile-sub{font-size:10px;color:var(--muted);margin-top:3px;font-weight:500}
+/* CHIP DOT (filter sheet, no emoji) */
+.chip-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;flex-shrink:0}
+/* EQ ITEM SUB + CHEVRON */
+.eq-item{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card);transition:background .12s}
+.eq-item:last-child{border-bottom:none}
+.eq-item-body{flex:1;min-width:0}
+.eq-item-name{font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eq-item-sub{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500}
+/* EQ CARD MINI-BAR SPACING */
+.eq-card .mini-bar{margin:7px 0 6px}
+/* EQ CARD CHEVRON */
+.eq-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.eq-chev{color:var(--muted-2);flex-shrink:0;align-self:center;margin-left:6px}
 
 </style>
 </head>
@@ -266,11 +293,8 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
         <svg id="thIco" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
-    <div class="timestamp">
-      <span class="live-dot"></span>
-      <span id="tsText">Дані актуальні</span>
-    </div>
   </header>
+  <div class="pulse-bar" id="pulseBar"></div>
   <div id="ph-banner" style="display:none"></div>
   <div id="ctx-layer" class="ctx-layer"></div>
   <div class="screens">
@@ -370,13 +394,17 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 <script>
 const DATA = [{"n":"Бутуліна Владислава","t":25,"ok":21,"w":3,"l":0,"c":1,"o":[{"a":"м.Дніпро, вул.Арсенича, 10","net":"АНЦ","city":"Дніпро","ok":3,"w":0,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{038F1989-81D6-4C86-9525-C82BA6391656}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{1C982D33-A0AC-4D85-9887-6AE362285E6F}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{2B047E44-B1BD-4D96-AA98-7BF473396767}","st":"ok","d":"1–30"}]},{"a":"м.Дніпро, пр.Героїв, 3","net":"АНЦ","city":"Дніпро","ok":4,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{3A158F55-C2CE-5EA7-BBB9-8CG584407878}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{4B269G66-D3DF-6FB8-CCC0-9DH695518989}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{5C370H77-E4EG-7GC9-DDD1-AEI706629090}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{6D481I88-F5FH-8HD0-EEE2-BFJ817730101}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{7E592J99-G6GI-9IE1-FFF3-CGK928841212}","st":"ok","d":"1–30"}]},{"a":"м.Верхівцеве, вул.Центральна, 63","net":"АНЦ","city":"Верхівцеве","ok":5,"w":1,"l":0,"c":1,"i":[{"pos":"DurexTray9","qr":"{8F603K00-H7HJ-0JF2-GGG4-DHI039952323}","st":"crit","d":"120+"},{"pos":"NurofenTray5","qr":"{9G714L11-I8IK-1KG3-HHH5-EIJ140063434}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{AG825M22-J9JL-2LH4-III6-FJK251174545}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{BH936N33-K0KM-3MI5-JJJ7-GKL362285656}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{CI047O44-L1LN-4NJ6-KKK8-HLM473396767}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{DJ158P55-M2MO-5OK7-LLL9-IMN584507878}","st":"ok","d":"1–30"}]},{"a":"м.Кам'янське, вул.Свободи, 22","net":"Ліки","city":"Кам'янське","ok":4,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{EK269Q66-N3NP-6PL8-MMM0-JNO695618989}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{FL370R77-O4OQ-7QM9-NNN1-KOP806729090}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{GM481S88-P5PR-8RN0-OOO2-LPQ917830101}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{HN592T99-Q6QS-9SO1-PPP3-MQR028941212}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{IO603U00-R7RT-0TP2-QQQ4-NRS139052323}","st":"ok","d":"1–30"}]},{"a":"м.Дніпро, вул.Робоча, 15а","net":"Ліки","city":"Дніпро","ok":5,"w":0,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{JP714V11-S8SU-1UQ3-RRR5-OST240163434}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{KQ825W22-T9TV-2VR4-SSS6-PTU351274545}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{LR936X33-U0UW-3WS5-TTT7-QUV462385656}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{MS047Y44-V1VX-4XT6-UUU8-RVW573496767}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{NT158Z55-W2WY-5YU7-VVV9-SWX684507878}","st":"ok","d":"1–30"}]}]},{"n":"Дуднік Вікторія","t":28,"ok":20,"w":6,"l":2,"c":0,"o":[{"a":"м.Харків, вул.Науки, 5","net":"Аптека Доброго Дня","city":"Харків","ok":3,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{AA001-BB01-CC01-DD01-EE0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{AA002-BB02-CC02-DD02-EE0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{AA003-BB03-CC03-DD03-EE0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{AA004-BB04-CC04-DD04-EE0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{AA005-BB05-CC05-DD05-EE0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Харків, пр.Леніна, 14","net":"Аптека Доброго Дня","city":"Харків","ok":4,"w":0,"l":2,"c":0,"i":[{"pos":"DurexTray9","qr":"{BB001-CC01-DD01-EE01-FF0100000001}","st":"late","d":"61–120"},{"pos":"NurofenTray5","qr":"{BB002-CC02-DD02-EE02-FF0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{BB003-CC03-DD03-EE03-FF0300000003}","st":"late","d":"61–120"},{"pos":"DurexWall","qr":"{BB004-CC04-DD04-EE04-FF0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{BB005-CC05-DD05-EE05-FF0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{BB006-CC06-DD06-EE06-FF0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Полтава, вул.Фрунзе, 7","net":"Ліки","city":"Полтава","ok":6,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{CC001-DD01-EE01-FF01-GG0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{CC002-DD02-EE02-FF02-GG0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{CC003-DD03-EE03-FF03-GG0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{CC004-DD04-EE04-FF04-GG0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{CC005-DD05-EE05-FF05-GG0500000005}","st":"warn","d":"31–60"},{"pos":"NurofenWall","qr":"{CC006-DD06-EE06-FF06-GG0600000006}","st":"ok","d":"1–30"},{"pos":"EvitestShelf","qr":"{CC007-DD07-EE07-FF07-GG0700000007}","st":"ok","d":"1–30"},{"pos":"DurexPromo","qr":"{CC008-DD08-EE08-FF08-GG0800000008}","st":"ok","d":"1–30"}]},{"a":"м.Полтава, вул.Жовтнева, 3","net":"Ліки","city":"Полтава","ok":4,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{DD001-EE01-FF01-GG01-HH0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{DD002-EE02-FF02-GG02-HH0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{DD003-EE03-FF03-GG03-HH0300000003}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{DD004-EE04-FF04-GG04-HH0400000004}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{DD005-EE05-FF05-GG05-HH0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Харків, вул.Сумська, 21","net":"Аптека 911","city":"Харків","ok":3,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{EE001-FF01-GG01-HH01-II0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{EE002-FF02-GG02-HH02-II0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{EE003-FF03-GG03-HH03-II0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{EE004-FF04-GG04-HH04-II0400000004}","st":"ok","d":"1–30"}]}]},{"n":"Дяченко Наталія","t":22,"ok":18,"w":3,"l":0,"c":1,"o":[{"a":"м.Запоріжжя, пр.Соборний, 11","net":"АНЦ","city":"Запоріжжя","ok":4,"w":0,"l":0,"c":1,"i":[{"pos":"NurofenTray5","qr":"{FF001-GG01-HH01-II01-JJ0100000001}","st":"crit","d":"120+"},{"pos":"DurexTray9","qr":"{FF002-GG02-HH02-II02-JJ0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{FF003-GG03-HH03-II03-JJ0300000003}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{FF004-GG04-HH04-II04-JJ0400000004}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{FF005-GG05-HH05-II05-JJ0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Запоріжжя, вул.Перемоги, 4","net":"АНЦ","city":"Запоріжжя","ok":5,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{GG001-HH01-II01-JJ01-KK0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{GG002-HH02-II02-JJ02-KK0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{GG003-HH03-II03-JJ03-KK0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{GG004-HH04-II04-JJ04-KK0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{GG005-HH05-II05-JJ05-KK0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{GG006-HH06-II06-JJ06-KK0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Мелітополь, вул.Центральна, 2","net":"Ліки","city":"Мелітополь","ok":3,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{HH001-II01-JJ01-KK01-LL0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{HH002-II02-JJ02-KK02-LL0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{HH003-II03-JJ03-KK03-LL0300000003}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{HH004-II04-JJ04-KK04-LL0400000004}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{HH005-II05-JJ05-KK05-LL0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Запоріжжя, бул.Шевченка, 8","net":"Аптека 911","city":"Запоріжжя","ok":4,"w":0,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{II001-JJ01-KK01-LL01-MM0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{II002-JJ02-KK02-LL02-MM0200000002}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{II003-JJ03-KK03-LL03-MM0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{II004-JJ04-KK04-LL04-MM0400000004}","st":"ok","d":"1–30"}]},{"a":"м.Запоріжжя, вул.Гагаріна, 17","net":"Аптека 911","city":"Запоріжжя","ok":2,"w":0,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{JJ001-KK01-LL01-MM01-NN0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{JJ002-KK02-LL02-MM02-NN0200000002}","st":"ok","d":"1–30"}]}]},{"n":"Константінов Андрій","t":30,"ok":18,"w":9,"l":2,"c":1,"o":[{"a":"м.Київ, вул.Хрещатик, 22","net":"АНЦ","city":"Київ","ok":2,"w":4,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{KK001-LL01-MM01-NN01-OO0100000001}","st":"warn","d":"31–60"},{"pos":"NurofenTray5","qr":"{KK002-LL02-MM02-NN02-OO0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{KK003-LL03-MM03-NN03-OO0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{KK004-LL04-MM04-NN04-OO0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{KK005-LL05-MM05-NN05-OO0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{KK006-LL06-MM06-NN06-OO0600000006}","st":"warn","d":"31–60"}]},{"a":"м.Київ, пр.Перемоги, 5","net":"АНЦ","city":"Київ","ok":3,"w":2,"l":1,"c":0,"i":[{"pos":"DurexTray9","qr":"{LL001-MM01-NN01-OO01-PP0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{LL002-MM02-NN02-OO02-PP0200000002}","st":"late","d":"61–120"},{"pos":"EvitestTrayNavi","qr":"{LL003-MM03-NN03-OO03-PP0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{LL004-MM04-NN04-OO04-PP0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{LL005-MM05-NN05-OO05-PP0500000005}","st":"warn","d":"31–60"},{"pos":"NurofenWall","qr":"{LL006-MM06-NN06-OO06-PP0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Київ, вул.Басейна, 1","net":"Аптека 911","city":"Київ","ok":4,"w":1,"l":0,"c":1,"i":[{"pos":"DurexTray9","qr":"{MM001-NN01-OO01-PP01-QQ0100000001}","st":"crit","d":"120+"},{"pos":"NurofenTray5","qr":"{MM002-NN02-OO02-PP02-QQ0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{MM003-NN03-OO03-PP03-QQ0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{MM004-NN04-OO04-PP04-QQ0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{MM005-NN05-OO05-PP05-QQ0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{MM006-NN06-OO06-PP06-QQ0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Бровари, пр.Незалежності, 3","net":"Ліки","city":"Бровари","ok":5,"w":1,"l":1,"c":0,"i":[{"pos":"DurexTray9","qr":"{NN001-OO01-PP01-QQ01-RR0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{NN002-OO02-PP02-QQ02-RR0200000002}","st":"late","d":"61–120"},{"pos":"EvitestTrayNavi","qr":"{NN003-OO03-PP03-QQ03-RR0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{NN004-OO04-PP04-QQ04-RR0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{NN005-OO05-PP05-QQ05-RR0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{NN006-OO06-PP06-QQ06-RR0600000006}","st":"ok","d":"1–30"},{"pos":"EvitestShelf","qr":"{NN007-OO07-PP07-QQ07-RR0700000007}","st":"ok","d":"1–30"}]},{"a":"м.Київ, вул.Антоновича, 12","net":"Аптека Доброго Дня","city":"Київ","ok":4,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{OO001-PP01-QQ01-RR01-SS0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{OO002-PP02-QQ02-RR02-SS0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{OO003-PP03-QQ03-RR03-SS0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{OO004-PP04-QQ04-RR04-SS0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{OO005-PP05-QQ05-RR05-SS0500000005}","st":"ok","d":"1–30"}]}]},{"n":"Мельник Дмитро","t":26,"ok":12,"w":11,"l":3,"c":0,"o":[{"a":"м.Львів, пл.Ринок, 1","net":"АНЦ","city":"Львів","ok":2,"w":4,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{PP001-QQ01-RR01-SS01-TT0100000001}","st":"warn","d":"31–60"},{"pos":"NurofenTray5","qr":"{PP002-QQ02-RR02-SS02-TT0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{PP003-QQ03-RR03-SS03-TT0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{PP004-QQ04-RR04-SS04-TT0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{PP005-QQ05-RR05-SS05-TT0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{PP006-QQ06-RR06-SS06-TT0600000006}","st":"warn","d":"31–60"}]},{"a":"м.Львів, вул.Городоцька, 8","net":"АНЦ","city":"Львів","ok":1,"w":3,"l":2,"c":0,"i":[{"pos":"DurexTray9","qr":"{QQ001-RR01-SS01-TT01-UU0100000001}","st":"late","d":"61–120"},{"pos":"NurofenTray5","qr":"{QQ002-RR02-SS02-TT02-UU0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{QQ003-RR03-SS03-TT03-UU0300000003}","st":"late","d":"61–120"},{"pos":"DurexWall","qr":"{QQ004-RR04-SS04-TT04-UU0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{QQ005-RR05-SS05-TT05-UU0500000005}","st":"warn","d":"31–60"},{"pos":"NurofenWall","qr":"{QQ006-RR06-SS06-TT06-UU0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Дрогобич, вул.Шевченка, 5","net":"Ліки","city":"Дрогобич","ok":4,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{RR001-SS01-TT01-UU01-VV0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{RR002-SS02-TT02-UU02-VV0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{RR003-SS03-TT03-UU03-VV0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{RR004-SS04-TT04-UU04-VV0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{RR005-SS05-TT05-UU05-VV0500000005}","st":"warn","d":"31–60"},{"pos":"NurofenWall","qr":"{RR006-SS06-TT06-UU06-VV0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Львів, вул.Зелена, 20","net":"Аптека 911","city":"Львів","ok":3,"w":1,"l":1,"c":0,"i":[{"pos":"DurexTray9","qr":"{SS001-TT01-UU01-VV01-WW0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{SS002-TT02-UU02-VV02-WW0200000002}","st":"late","d":"61–120"},{"pos":"EvitestTrayNavi","qr":"{SS003-TT03-UU03-VV03-WW0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{SS004-TT04-UU04-VV04-WW0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{SS005-TT05-UU05-VV05-WW0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Трускавець, вул.Шептицького, 3","net":"Ліки","city":"Трускавець","ok":2,"w":1,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{TT001-UU01-VV01-WW01-XX0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{TT002-UU02-VV02-WW02-XX0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{TT003-UU03-VV03-WW03-XX0300000003}","st":"ok","d":"1–30"}]}]},{"n":"Серченко Ірина","t":24,"ok":16,"w":6,"l":1,"c":1,"o":[{"a":"м.Одеса, вул.Дерибасівська, 3","net":"АНЦ","city":"Одеса","ok":3,"w":1,"l":0,"c":1,"i":[{"pos":"DurexTray9","qr":"{UU001-VV01-WW01-XX01-YY0100000001}","st":"crit","d":"120+"},{"pos":"NurofenTray5","qr":"{UU002-VV02-WW02-XX02-YY0200000002}","st":"ok","d":"1–30"},{"pos":"EvitestTrayNavi","qr":"{UU003-VV03-WW03-XX03-YY0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{UU004-VV04-WW04-XX04-YY0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{UU005-VV05-WW05-XX05-YY0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Одеса, пр.Шевченка, 11","net":"АНЦ","city":"Одеса","ok":4,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{VV001-WW01-XX01-YY01-ZZ0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{VV002-WW02-XX02-YY02-ZZ0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{VV003-WW03-XX03-YY03-ZZ0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{VV004-WW04-XX04-YY04-ZZ0400000004}","st":"warn","d":"31–60"},{"pos":"ClearBlueShelf","qr":"{VV005-WW05-XX05-YY05-ZZ0500000005}","st":"ok","d":"1–30"},{"pos":"NurofenWall","qr":"{VV006-WW06-XX06-YY06-ZZ0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Миколаїв, вул.Адміральська, 7","net":"Ліки","city":"Миколаїв","ok":4,"w":2,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{WW001-XX01-YY01-ZZ01-AA0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{WW002-XX02-YY02-ZZ02-AA0200000002}","st":"warn","d":"31–60"},{"pos":"EvitestTrayNavi","qr":"{WW003-XX03-YY03-ZZ03-AA0300000003}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{WW004-XX04-YY04-ZZ04-AA0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{WW005-XX05-YY05-ZZ05-AA0500000005}","st":"warn","d":"31–60"},{"pos":"NurofenWall","qr":"{WW006-XX06-YY06-ZZ06-AA0600000006}","st":"ok","d":"1–30"}]},{"a":"м.Одеса, вул.Ланжеронівська, 2","net":"Аптека Доброго Дня","city":"Одеса","ok":3,"w":1,"l":1,"c":0,"i":[{"pos":"DurexTray9","qr":"{XX001-YY01-ZZ01-AA01-BB0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{XX002-YY02-ZZ02-AA02-BB0200000002}","st":"late","d":"61–120"},{"pos":"EvitestTrayNavi","qr":"{XX003-YY03-ZZ03-AA03-BB0300000003}","st":"warn","d":"31–60"},{"pos":"DurexWall","qr":"{XX004-YY04-ZZ04-AA04-BB0400000004}","st":"ok","d":"1–30"},{"pos":"ClearBlueShelf","qr":"{XX005-YY05-ZZ05-AA05-BB0500000005}","st":"ok","d":"1–30"}]},{"a":"м.Херсон, вул.Декабристів, 4","net":"Аптека 911","city":"Херсон","ok":2,"w":0,"l":0,"c":0,"i":[{"pos":"DurexTray9","qr":"{YY001-ZZ01-AA01-BB01-CC0100000001}","st":"ok","d":"1–30"},{"pos":"NurofenTray5","qr":"{YY002-ZZ02-AA02-BB02-CC0200000002}","st":"ok","d":"1–30"},{"pos":"DurexWall","qr":"{YY003-ZZ03-AA03-BB03-CC0300000003}","st":"ok","d":"1–30"}]}]}]
 
+// CONSTANTS
+const SWIPE_MIN = 20;
+const SWIPE_TRIG = 50;
+
 // STATE
 const S = {
   sr: 0,
   outlet: null,
   tab: 'overview',
   carIdx: 0,
-  search: '',
+  phSrch: '',
   fNet: 'all',
   fCity: 'all',
   fSt: []
@@ -400,13 +428,31 @@ function miniBar(ok,w,l,c){
   </div>`;
 }
 
+
+// ── PULSE BAR ──
+function renderPulseBar(){
+  const d=sr();
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const pills=[
+    {st:'ok',v:d.ok,l:'ОК'},
+    {st:'warn',v:d.w,l:'Перевир.'},
+    {st:'late',v:d.l,l:'Давно'},
+    {st:'crit',v:d.c,l:'Критично'}
+  ].filter(p=>p.v>0);
+  document.getElementById('pulseBar').innerHTML=
+    '<div class="pb-pills">'+
+    pills.map(p=>`<div class="pb-pill" style="color:var(--${p.st})"><div class="pb-dot" style="background:var(--${p.st})"></div><span class="pb-cnt">${p.v}</span><span class="pb-lbl">${p.l}</span></div>`).join('')+
+    '</div>'+
+    `<div class="pb-period"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${dateStr}</div>`;
+}
 // ── HEADER ──
 function renderHeader(){
   const nm=sr().n;
   document.getElementById('srAv').textContent=nm.charAt(0);
   document.getElementById('srNm').textContent=nm;
   const now=new Date();
-  document.getElementById('tsText').textContent='Дані за '+now.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'});
+
 }
 
 // ── BANNER ──
@@ -540,18 +586,22 @@ function renderOverview(){
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>Аптеки</div>
         <div class="ov-tile-val">${d.o.length}</div>
+        <div class="ov-tile-sub">${critPhC>0?critPhC+' з проблемами':'Всі в нормі'}</div>
       </div>
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Одиниць</div>
         <div class="ov-tile-val">${t}</div>
+        <div class="ov-tile-sub">${d.ok} вчасно</div>
       </div>
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Вчасно</div>
         <div class="ov-tile-val" style="color:var(--ok)">${pctN}%</div>
+        <div class="ov-tile-sub">${d.ok} / ${t} од.</div>
       </div>
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Критично</div>
         <div class="ov-tile-val" style="color:${d.c>0?'var(--crit)':'var(--ink)'}">${d.c}</div>
+        <div class="ov-tile-sub">${d.c+d.l+d.w} всього проблем.</div>
       </div>
     </div>
     <div class="sec-t">Потребують уваги</div>
@@ -560,14 +610,13 @@ function renderOverview(){
 }
 
 // ── TAB 2: PHARMACIES ──
-let phSrch='';
 function renderPharmacies(){
   const d=sr();
   let outs=d.o.map((o,i)=>({...o,idx:i}));
   if(S.fNet!=='all') outs=outs.filter(o=>o.net===S.fNet);
   if(S.fCity!=='all') outs=outs.filter(o=>o.city===S.fCity);
   if(S.fSt.length) outs=outs.filter(o=>S.fSt.some(st=>st==='crit'?o.c>0:st==='late'?o.l>0:o.w>0));
-  const q=phSrch.toLowerCase().trim();
+  const q=S.phSrch.toLowerCase().trim();
   if(q) outs=outs.filter(o=>o.a.toLowerCase().includes(q)||o.net.toLowerCase().includes(q)||o.city.toLowerCase().includes(q));
   outs.sort((a,b)=>(b.c+b.l+b.w)-(a.c+a.l+a.w)||b.i.length-a.i.length);
 
@@ -638,15 +687,14 @@ function renderQR(){
   try{
     new QRCode(box,{text:it.qr,width:200,height:200,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
   }catch(e){
-    box.innerHTML='<div style="width:200px;height:200px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#888;font-size:11px;border-radius:4px">QR недоступний</div>';
+    box.innerHTML='<div style="width:200px;height:200px;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;border-radius:4px">QR недоступний</div>';
   }
   setupSwipe();
 }
 
-let _curGUID='';
 function copyG(){
   const o=out();if(!o)return;
-  _curGUID=o.i[S.carIdx]?.qr||'';
+  const _curGUID=o.i[S.carIdx]?.qr||'';
   navigator.clipboard?.writeText(_curGUID).then(()=>{
     const b=document.getElementById('copy-btn');
     if(b){b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';setTimeout(()=>{b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';},1500);}
@@ -664,9 +712,9 @@ function setupSwipe(){
   el.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
   el.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].clientX-sx;
-    if(Math.abs(dx)<20)return;
-    if(dx<-50)nextQR();
-    else if(dx>50)prevQR();
+    if(Math.abs(dx)<SWIPE_MIN)return;
+    if(dx<-SWIPE_TRIG)nextQR();
+    else if(dx>SWIPE_TRIG)prevQR();
   },{passive:true});
 }
 
@@ -701,6 +749,14 @@ function dotRowEq(ok,w,l,c){
 function stBadge(st){
   return `<div class="eq-item-badge" style="background:var(--${st}-soft);color:var(--${st})"><div style="width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0"></div>${ST_LBL[st]} · ${ST_D[st]}</div>`;
 }
+
+function eqCategory(pos){
+  if(/Tray/i.test(pos))return'Трей';
+  if(/Wall/i.test(pos))return'Настінне';
+  if(/Shelf/i.test(pos))return'Полиця';
+  if(/Promo/i.test(pos))return'Промо';
+  return'Обладнання';
+}
 function renderEquipment(){
   const d=sr();
   const o=out();
@@ -709,8 +765,12 @@ function renderEquipment(){
     // Outlet selected: list items for this pharmacy
     document.getElementById('eq-list').innerHTML=`<div style="height:8px"></div>`+o.i.map(it=>`
       <div class="eq-item">
-        <div class="eq-item-name">${it.pos}</div>
+        <div class="eq-item-body">
+          <div class="eq-item-name">${it.pos}</div>
+          <div class="eq-item-sub">${eqCategory(it.pos)}</div>
+        </div>
         ${stBadge(it.st)}
+        <svg style="color:var(--muted-2);flex-shrink:0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>`).join('')+'<div class="h16"></div>';
     return;
   }
@@ -723,8 +783,10 @@ function renderEquipment(){
           <div class="eq-card-cnt">${t.tot}</div>
           <div class="eq-card-unit">одиниць</div>
         </div>
+        <svg class="eq-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="eq-card-sub">у ${t.outs.length} аптеках</div>
+      ${miniBar(t.ok,t.w,t.l,t.c)}
       <div class="eq-card-dots">${dotRowEq(t.ok,t.w,t.l,t.c)}</div>
     </div>`).join('')+`</div>`;
 }
@@ -743,6 +805,8 @@ function setTab(t){
   // Reset swipe guard so QR re-registers on every tab switch
   const qa=document.getElementById('qr-area');
   if(qa)qa._sw=false;
+  // Reset app-bar scroll elevation on tab switch
+  document.querySelector('.app-bar').classList.remove('scrolled');
   render();
 }
 document.querySelector('.bottom-nav').addEventListener('click',e=>{
@@ -765,7 +829,7 @@ document.getElementById('srBtn').addEventListener('click',()=>{
     </div>`).join('');
   openSheet('sh-sr',()=>closeSheet('sh-sr'));
 });
-function selSR(i){S.sr=i;S.outlet=null;S.carIdx=0;phSrch='';S.fNet='all';S.fCity='all';S.fSt=[];document.getElementById('ph-srch-inp').value='';closeSheet('sh-sr');render();}
+function selSR(i){S.sr=i;S.outlet=null;S.carIdx=0;S.phSrch='';S.fNet='all';S.fCity='all';S.fSt=[];document.getElementById('ph-srch-inp').value='';closeSheet('sh-sr');render();}
 function selectOutlet(i){S.outlet=i;if(S.tab==='qr'||S.tab==='equipment')S.carIdx=0;render();}
 
 // ── PH FILTER ──
@@ -781,8 +845,8 @@ function openPhFlt(){
     ['all',...cities].map(c=>`<div class="chip${S.fCity===c?' on':''}" onclick="setFCity('${c.replace(/'/g,"\\'")}')">
       ${c==='all'?'Всі міста':c}</div>`).join('');
   document.getElementById('sh-flt-status').innerHTML=
-    [{id:'crit',l:'🔴 Критично'},{id:'late',l:'🟠 Давно'},{id:'warn',l:'🟡 Перевірити'}].map(s=>
-      `<div class="chip${S.fSt.includes(s.id)?' on':''}" onclick="togFSt('${s.id}')">${s.l}</div>`).join('');
+    [{id:'crit',c:'crit',l:'Критично'},{id:'late',c:'late',l:'Давно'},{id:'warn',c:'warn',l:'Перевірити'}].map(s=>
+      `<div class="chip${S.fSt.includes(s.id)?' on':''}" onclick="togFSt('${s.id}')"><span class="chip-dot" style="background:var(--${s.c})"></span>${s.l}</div>`).join('');
   openSheet('sh-flt',()=>closeSheet('sh-flt'));
 }
 function setFNet(v){S.fNet=v;renderPharmacies();openPhFlt();}
@@ -795,14 +859,18 @@ function openEqDetail(ti){
   if(out())return;
   const t=_eqTypes[ti];
   document.getElementById('sh-eq-title').textContent=t.pos+' ('+t.tot+' од.)';
-  document.getElementById('sh-eq-list').innerHTML=t.outs.map(o=>`
-    <div class="eq-det-row" onclick="selectOutlet(${o.idx});closeSheet('sh-eq')">
+  const d2=sr();
+  document.getElementById('sh-eq-list').innerHTML=t.outs.map(o=>{
+    const item=d2.o[o.idx]?.i.find(x=>x.pos===t.pos);
+    const st=item?item.st:'ok';
+    return `<div class="eq-det-row" onclick="selectOutlet(${o.idx});closeSheet('sh-eq')">
       <div style="flex:1;min-width:0">
         <div class="eq-det-addr">${o.a}</div>
         <div class="eq-det-meta">${o.net||''}</div>
       </div>
+      ${stBadge(st)}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>`).join('');
+    </div>`;}).join('');
   openSheet('sh-eq',()=>closeSheet('sh-eq'));
 }
 
@@ -832,7 +900,7 @@ function addSwipeClose(bgId,closeFn){
 }
 
 // ── SEARCH ──
-document.getElementById('ph-srch-inp').addEventListener('input',e=>{phSrch=e.target.value;renderPharmacies();});
+document.getElementById('ph-srch-inp').addEventListener('input',e=>{S.phSrch=e.target.value;renderPharmacies();});
 
 // ── THEME ──
 function isDark(){
@@ -860,8 +928,18 @@ document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
   if(sab>0){const d=window.innerHeight-(screen.height-sab);if(d>sab*.5)document.documentElement.classList.add('pwa-full');}
 })();
 
+
+// ── SCROLL ELEVATION ──
+document.querySelectorAll('.scroll-a').forEach(el=>{
+  el.addEventListener('scroll',()=>{
+    const screen=el.closest('.screen');
+    if(screen&&screen.classList.contains('active')){
+      document.querySelector('.app-bar').classList.toggle('scrolled',el.scrollTop>8);
+    }
+  },{passive:true});
+});
 // ── INIT ──
-function render(){renderHeader();renderBanner();renderCtxLayer();renderTab();}
+function render(){renderHeader();renderPulseBar();renderBanner();renderCtxLayer();renderTab();}
 render();
 
 </script>
