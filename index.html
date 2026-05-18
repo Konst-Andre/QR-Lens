@@ -116,6 +116,9 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .cl-dots{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
 .cl-st{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700}
 .cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+/* Batch 8d TAB4-OUTLET-FUSE: візуально склеюємо ph-banner і ctx-layer на Tab 4 з outlet */
+body.tab4-fused #ph-banner{border-bottom:none}
+body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(--border);padding-left:32px}
 /* EQ CARDS (no outlet) */
 .eq-cards{display:flex;flex-direction:column;gap:8px;padding:10px 16px}
 .eq-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:13px 14px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
@@ -153,7 +156,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .prog-legend{display:flex;gap:10px;flex-wrap:wrap}
 .pl-it{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink-2)}
 .pl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.ov-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ov-tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .ov-tile-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px}
 .ov-tile-val{font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-1px}
 .prob-list{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
@@ -210,7 +213,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .qr-nav:active{background:var(--bg-soft)}
 .qr-nav:disabled{opacity:.25;cursor:default;touch-action:none;pointer-events:none}
 .qr-nav.prev{left:0}.qr-nav.next{right:0}
-.qr-chips{display:flex;gap:6px;padding:10px 16px 14px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft)}
+.qr-chips{display:flex;gap:6px;padding:10px 16px 22px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
 .qr-chips::-webkit-scrollbar{display:none}
 .qr-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--card);color:var(--ink-2);flex-shrink:0;transition:all .12s;min-height:34px;display:inline-flex;align-items:center;gap:5px}
 .qr-chip.act{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);border-width:1.5px}
@@ -260,7 +263,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 /* ── PULSE BAR ── (removed in Batch 8b — see Roadmap principle: no duplicated context) */
 .pb-period{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--muted-2);flex-shrink:0;margin-left:auto;padding-left:8px}
 /* TILE SUB */
-.ov-tile{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--sh1)}
+.ov-tile{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 10px;box-shadow:var(--sh1)}
 .ov-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent-soft-2)}
 .ov-tile-sub{font-size:10px;color:var(--muted);margin-top:3px;font-weight:500}
 /* CHIP DOT (filter sheet, no emoji) */
@@ -465,8 +468,10 @@ function renderCtxLayer(){
   if(S.tab==='pharmacies'){el.style.display='none';return;} // no ctx-layer on Tab 2 — counter is in filter-row
   el.style.display='';  // reset to CSS default each time
   if(S.tab==='overview'){
-    const pct=Math.round(d.ok/t*100);
-    el.innerHTML=`<span class="cl-main">${d.ok}/${t} відскановано · ${pct}%</span>`;
+    // Batch 8d TAB1-STATUS-HIDE: ctx-layer на Tab 1 завжди прихований.
+    // Причина: показники "X/Y · Z%" повністю дублюються prog-block (з progress bar + legend) і hero-tiles.
+    // Status line не несе нової інформації — тільки забирає вертикальний простір.
+    el.style.display='none';return;
   } else if(S.tab==='qr'){
     if(o){
       el.style.display='none';return;
@@ -477,13 +482,17 @@ function renderCtxLayer(){
   } else if(S.tab==='equipment'){
     if(o){
       const oi=o.i;const okC=oi.filter(x=>x.st==='ok').length,wC=oi.filter(x=>x.st==='warn').length,lC=oi.filter(x=>x.st==='late').length,cC=oi.filter(x=>x.st==='crit').length;
-      el.innerHTML=`<span class="cl-main">${oi.length} одиниць</span><div class="cl-dots">${dotRowCl(okC,wC,lC,cC)}</div>`;
+      const pct=Math.round(okC/oi.length*100);
+      // Batch 8d TAB4-CTX-DEDUP: "N одиниць" вже в ph-banner — показуємо % сканування + dots (нова інфо для цієї аптеки)
+      el.innerHTML=`<span class="cl-main">${pct}% відскановано</span><div class="cl-dots">${dotRowCl(okC,wC,lC,cC)}</div>`;
     } else {
       const types=getEqTypes(d);const totU=types.reduce((s,t)=>s+t.tot,0);
       const okC=types.reduce((s,t)=>s+t.ok,0),wC=types.reduce((s,t)=>s+t.w,0),lC=types.reduce((s,t)=>s+t.l,0),cC=types.reduce((s,t)=>s+t.c,0);
       el.innerHTML=`<span class="cl-main">${types.length} типів · ${totU} одиниць</span><div class="cl-dots">${dotRowCl(okC,wC,lC,cC)}</div>`;
     }
   }
+  // Batch 8d TAB4-OUTLET-FUSE: візуальне склеювання ph-banner + ctx-layer на Tab 4 з outlet
+  document.body.classList.toggle('tab4-fused', S.tab==='equipment' && !!o);
 }
 function renderOverview(){
   const d=sr();
@@ -581,11 +590,7 @@ function renderOverview(){
         <div class="ov-tile-val">${t}</div>
         <div class="ov-tile-sub">${d.ok} вчасно</div>
       </div>
-      <div class="ov-tile">
-        <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Вчасно</div>
-        <div class="ov-tile-val" style="color:var(--ok)">${pctN}%</div>
-        <div class="ov-tile-sub">${d.ok} / ${t} од.</div>
-      </div>
+      <!-- Batch 8d TAB1-HERO-3TILES: tile "Вчасно %" видалений — дублював prog-block (той самий %, є progress bar + legend) -->
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Критично</div>
         <div class="ov-tile-val" style="color:${d.c>0?'var(--crit)':'var(--ink)'}">${d.c}</div>
@@ -613,7 +618,8 @@ function renderPharmacies(){
   // Counter relocated to search placeholder (Batch 8b) — flt-button on-state shows filter active
   const inp=document.getElementById('ph-srch-inp');
   if(inp&&!inp.matches(':focus')){
-    inp.placeholder = `Пошук серед ${d.o.length} аптек`;
+    // Batch 8d TAB2-SEARCH-PLACEHOLDER: підказуємо що шукається + кількість
+    inp.placeholder = `Адреса, мережа, місто · ${d.o.length} аптек`;
   }
 
   document.getElementById('ph-list').innerHTML=outs.map(o=>{
@@ -792,9 +798,8 @@ function setTab(t){
   S.tab=t;
   document.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('act',b.dataset.tab===t));
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id==='sc-'+t));
-  // Reset swipe guard so QR re-registers on every tab switch
-  const qa=document.getElementById('qr-area');
-  if(qa)qa._sw=false;
+  // B5 Batch 8c: NO _sw reset — element persists, listener registered once for life.
+  // Previous reset caused listener accumulation → N tab switches = N nextQR() calls per swipe.
   // Reset app-bar scroll elevation on tab switch
   document.querySelector('.app-bar').classList.remove('scrolled');
   // Tab 2: unify app-bar with filter-row (no border between them)
@@ -910,9 +915,7 @@ function updThIco(){
 }
 
 // ── IOS ──
-document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
-document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});
-document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
+// B2a Batch 8c: pinch-zoom listeners consolidated to single registration below (was 2× = 6 listeners).
 (function(){
   const isS=window.matchMedia('(display-mode:standalone)').matches||navigator.standalone;
   if(!isS)return;
@@ -921,13 +924,20 @@ document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
 })();
 
 
-// ── SCROLL ELEVATION ──
+// ── SCROLL ELEVATION ── (B2b Batch 8c: cached selectors + RAF throttle)
+const _appBar=document.querySelector('.app-bar');
 document.querySelectorAll('.scroll-a').forEach(el=>{
+  const screen=el.closest('.screen');
+  let ticking=false;
   el.addEventListener('scroll',()=>{
-    const screen=el.closest('.screen');
-    if(screen&&screen.classList.contains('active')){
-      document.querySelector('.app-bar').classList.toggle('scrolled',el.scrollTop>8);
-    }
+    if(ticking)return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      if(screen&&screen.classList.contains('active')){
+        _appBar.classList.toggle('scrolled',el.scrollTop>8);
+      }
+      ticking=false;
+    });
   },{passive:true});
 });
 // ── PINCH-ZOOM BLOCK (Batch 8b) ──
