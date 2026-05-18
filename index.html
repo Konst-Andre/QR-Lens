@@ -66,7 +66,7 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 #app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
 /* APP BAR */
 .app-bar{background:var(--card);border-bottom:1px solid var(--border);padding:max(18px,calc(env(safe-area-inset-top, 0px) + 12px)) 16px 8px;flex-shrink:0;z-index:20;position:relative;transition:box-shadow .15s,border-color .15s}
-.app-bar.unified-filter{border-bottom-color:transparent}
+/* Batch 8e TAB2-UNIFY-FIX: unified-filter трюк прибрано — filter-row завжди має чітку сепарацію від app-bar і ph-banner */
 .app-bar.scrolled{box-shadow:var(--sh2)}
 .bar-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
 .brand{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--ink);flex-shrink:0;line-height:1}
@@ -95,9 +95,9 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 .screen.active{display:flex}
 .scroll-a{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 /* NAV */
-.bottom-nav{display:flex;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding:4px 8px;padding-bottom:calc(4px + var(--sab))}
-html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
-.nav-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:600;transition:color .15s,background .15s;cursor:pointer}
+.bottom-nav{display:flex;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding:2px 8px;padding-bottom:calc(2px + var(--sab))}
+html.pwa-full .nav-i{padding-top:4px;padding-bottom:4px}
+.nav-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:4px 4px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:600;transition:color .15s,background .15s;cursor:pointer}
 .nav-i svg{width:20px;height:20px;transition:stroke .15s}
 .nav-i.act{color:var(--accent)}
 /* UTILS */
@@ -121,14 +121,14 @@ body.tab4-fused #ph-banner{border-bottom:none}
 body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(--border);padding-left:32px}
 /* EQ CARDS (no outlet) */
 .eq-cards{display:flex;flex-direction:column;gap:8px;padding:10px 16px}
-.eq-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:13px 14px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
+.eq-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--sh1);cursor:pointer;transition:border-color .12s,background .12s}
 .eq-card:active{background:var(--card-2);border-color:var(--border-2)}
 .eq-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
 .eq-card-name{font-size:13px;font-weight:700;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:10px}
 .eq-card-right{text-align:right;flex-shrink:0}
 .eq-card-cnt{font-size:24px;font-weight:800;color:var(--ink);line-height:1.1;letter-spacing:-1px}
 .eq-card-unit{font-size:10px;color:var(--muted)}
-.eq-card-sub{font-size:11px;color:var(--muted);margin-bottom:8px}
+.eq-card-sub{font-size:11px;color:var(--muted);margin-bottom:6px}
 .eq-card-dots{display:flex;align-items:center;gap:10px}
 .eq-dot-it{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700}
 /* EQ ITEMS (outlet selected) */
@@ -213,10 +213,12 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .qr-nav:active{background:var(--bg-soft)}
 .qr-nav:disabled{opacity:.25;cursor:default;touch-action:none;pointer-events:none}
 .qr-nav.prev{left:0}.qr-nav.next{right:0}
-.qr-chips{display:flex;gap:6px;padding:10px 16px 22px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
+.qr-chips{display:flex;gap:6px;padding:8px 16px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
 .qr-chips::-webkit-scrollbar{display:none}
 .qr-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--card);color:var(--ink-2);flex-shrink:0;transition:all .12s;min-height:34px;display:inline-flex;align-items:center;gap:5px}
 .qr-chip.act{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);border-width:1.5px}
+/* Batch 8e QR-CHIP-ACTIVE-DARK: посилений контраст active capsule у dark theme (note 2.1) */
+[data-theme="dark"] .qr-chip.act,:root:not([data-theme="light"]) .qr-chip.act{background:rgba(42,140,132,.22);color:#7DDFD7;border-color:#3DA8A0;font-weight:700;box-shadow:0 0 0 1px rgba(125,223,215,.15)}
 .qr-chip.ok{border-color:var(--ok)}.qr-chip.warn{border-color:var(--warn)}
 .qr-chip.late{border-color:var(--late)}.qr-chip.crit{border-color:var(--crit)}
 /* EQUIPMENT */
@@ -275,7 +277,7 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .eq-item-name{font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eq-item-sub{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500}
 /* EQ CARD MINI-BAR SPACING */
-.eq-card .mini-bar{margin:7px 0 6px;max-width:70%;width:100%}
+.eq-card .mini-bar{margin:4px 0 4px;max-width:70%;width:100%}
 /* EQ CARD CHEVRON */
 .eq-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
 .eq-chev{color:var(--muted-2);flex-shrink:0;align-self:center;margin-left:6px}
@@ -312,17 +314,20 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 
     <!-- TAB 2: PHARMACIES -->
     <div class="screen" id="sc-pharmacies">
-      <div class="filter-row">
-        <div class="ph-srch">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="search" id="ph-srch-inp" placeholder="Пошук аптеки або адреси…" autocomplete="off">
+      <!-- Batch 8f TAB2-FILTER-SCROLL: filter-row тепер всередині scroll-a — скролиться разом з картками (як у KPI Lens) -->
+      <div class="scroll-a">
+        <div class="filter-row">
+          <div class="ph-srch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="search" id="ph-srch-inp" placeholder="Пошук аптеки або адреси…" autocomplete="off">
+          </div>
+          <button class="flt-btn" id="ph-flt-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>
+            Фільтри
+          </button>
         </div>
-        <button class="flt-btn" id="ph-flt-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>
-          Фільтри
-        </button>
+        <div class="ph-list" id="ph-list"></div><div class="h16"></div>
       </div>
-      <div class="scroll-a"><div class="ph-list" id="ph-list"></div><div class="h16"></div></div>
     </div>
 
     <!-- TAB 3: QR CODES -->
@@ -562,6 +567,11 @@ function renderOverview(){
     :`<div style="padding:16px 0;color:var(--ok);font-size:13px;font-weight:600;text-align:center">✓ Все відскановано вчасно</div>`;
 
   const critPhC=d.o.filter(o=>o.c>0).length;
+  // Batch 8e TAB1-TILE-SUBS: нові subscripts на основі номенклатури — кожен tile показує унікальну інфо
+  const cityCount = new Set(d.o.map(o=>o.city)).size;
+  const typeCount = new Set(d.o.flatMap(o=>o.i.map(it=>it.pos))).size;
+  const cityW = cityCount===1?'місті':'містах';
+  const apothW = critPhC===1?'аптеці':'аптеках';
   document.getElementById('ov-content').innerHTML=`
     <div style="height:4px"></div>
     <div class="prog-block">
@@ -583,18 +593,18 @@ function renderOverview(){
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>Аптеки</div>
         <div class="ov-tile-val">${d.o.length}</div>
-        <div class="ov-tile-sub">${critPhC>0?critPhC+' з проблемами':'Всі в нормі'}</div>
+        <div class="ov-tile-sub">У ${cityCount} ${cityW}</div>
       </div>
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Одиниць</div>
         <div class="ov-tile-val">${t}</div>
-        <div class="ov-tile-sub">${d.ok} вчасно</div>
+        <div class="ov-tile-sub">${typeCount} типів обладнання</div>
       </div>
       <!-- Batch 8d TAB1-HERO-3TILES: tile "Вчасно %" видалений — дублював prog-block (той самий %, є progress bar + legend) -->
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Критично</div>
         <div class="ov-tile-val" style="color:${d.c>0?'var(--crit)':'var(--ink)'}">${d.c}</div>
-        <div class="ov-tile-sub">${d.l+d.w} ще потребують</div>
+        <div class="ov-tile-sub">${d.c>0?'У '+critPhC+' '+apothW:'Все в порядку'}</div>
       </div>
     </div>
     <div class="sec-t">Потребують уваги</div>
@@ -618,8 +628,8 @@ function renderPharmacies(){
   // Counter relocated to search placeholder (Batch 8b) — flt-button on-state shows filter active
   const inp=document.getElementById('ph-srch-inp');
   if(inp&&!inp.matches(':focus')){
-    // Batch 8d TAB2-SEARCH-PLACEHOLDER: підказуємо що шукається + кількість
-    inp.placeholder = `Адреса, мережа, місто · ${d.o.length} аптек`;
+    // Batch 8e TAB2-PLACEHOLDER-FIT: скорочено для вмісту з кнопкою фільтру (раніше обрізалось)
+    inp.placeholder = `Адреса, мережа · ${d.o.length} аптек`;
   }
 
   document.getElementById('ph-list').innerHTML=outs.map(o=>{
@@ -802,8 +812,7 @@ function setTab(t){
   // Previous reset caused listener accumulation → N tab switches = N nextQR() calls per swipe.
   // Reset app-bar scroll elevation on tab switch
   document.querySelector('.app-bar').classList.remove('scrolled');
-  // Tab 2: unify app-bar with filter-row (no border between them)
-  document.querySelector('.app-bar').classList.toggle('unified-filter',t==='pharmacies');
+  // Batch 8e TAB2-UNIFY-FIX: unified-filter toggle прибрано — filter-row має власну сепарацію
   render();
 }
 document.querySelector('.bottom-nav').addEventListener('click',e=>{
