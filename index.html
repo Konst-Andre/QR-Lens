@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -55,29 +55,35 @@
   }
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body,#app{touch-action:pan-x pan-y}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--card)}
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 *{-webkit-tap-highlight-color:transparent}
+.brand,.app-bar,.timestamp,.ctx-layer,.bottom-nav{-webkit-user-select:none;user-select:none}
+button:disabled{touch-action:none;pointer-events:none}
 input,select,textarea{font-size:16px!important;font-family:inherit}
 button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
 #app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
 /* APP BAR */
-.app-bar{background:var(--card);border-bottom:1px solid var(--border);padding:max(12px,calc(env(safe-area-inset-top)+10px)) 16px max(10px,calc(env(safe-area-inset-top)+8px));flex-shrink:0;z-index:20;transition:box-shadow .15s}
+.app-bar{background:var(--card);border-bottom:1px solid var(--border);padding:max(18px,calc(env(safe-area-inset-top, 0px) + 12px)) 16px 8px;flex-shrink:0;z-index:20;position:relative;transition:box-shadow .15s,border-color .15s}
+.app-bar.unified-filter{border-bottom-color:transparent}
 .app-bar.scrolled{box-shadow:var(--sh2)}
-.bar-top{display:flex;align-items:center;gap:8px}
-.brand{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--ink);flex-shrink:0}
-.brand em{color:var(--accent);font-style:normal;font-weight:400;font-size:14px;vertical-align:middle;margin:0 1px}
-.sr-pill{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 5px;color:var(--ink);font-size:13px;font-weight:600;min-width:0;transition:background .12s;cursor:pointer}
+.bar-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.brand{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--ink);flex-shrink:0;line-height:1}
+.brand em{color:var(--accent);font-style:normal;font-size:20px;vertical-align:middle;line-height:0}
+[data-theme="dark"] .brand em{color:#6DD8D0}
+.sr-pill{flex:1 1 auto;max-width:240px;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 5px;color:var(--ink);font-size:13px;font-weight:600;min-width:0;transition:background .12s;cursor:pointer}
 .sr-pill:active{background:var(--border)}
 .avatar{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.sr-nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.icon-btn{width:34px;height:34px;background:var(--bg-soft);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);flex-shrink:0;cursor:pointer;transition:background .12s}
+.sr-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon-btn{width:36px;height:36px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;color:var(--ink-2);flex-shrink:0;cursor:pointer;transition:background .12s}
 .icon-btn:active{background:var(--border)}
+.chev-ico{color:var(--muted);flex-shrink:0}
 .timestamp{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0;animation:livePulse 2s ease-in-out infinite}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
 /* BANNER */
-#ph-banner{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--bg-soft);border-bottom:1px solid var(--border);border-left:3px solid var(--accent);flex-shrink:0}
+#ph-banner{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--bg-soft);border-bottom:1px solid var(--border);border-left:3px solid var(--accent);flex-shrink:0}
 .ph-b-ico{color:var(--accent);flex-shrink:0;display:flex;align-items:center}
 .ph-b-body{flex:1;min-width:0}
 .ph-b-addr{font-size:12px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -106,7 +112,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .ctx-layer{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;min-height:34px}
 .cl-main{font-size:12px;font-weight:700;color:var(--ink-2)}
 .cl-sub{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cl-sep{font-size:11px;color:var(--border-2);margin:0 2px}
+.cl-sep{font-size:11px;color:var(--muted);margin:0 2px}
 .cl-dots{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
 .cl-st{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700}
 .cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
@@ -123,8 +129,8 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .eq-card-dots{display:flex;align-items:center;gap:10px}
 .eq-dot-it{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700}
 /* EQ ITEMS (outlet selected) */
-.eq-item{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card);transition:background .12s}
-.eq-item:last-child{border-bottom:none}
+.eq-item{display:flex;align-items:center;gap:10px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);box-shadow:var(--sh1);transition:background .12s,border-color .12s}
+.eq-item:active{background:var(--card-2);border-color:var(--border-2)}
 .eq-item-name{flex:1;font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eq-item-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
 /* PH CARD dots */
@@ -132,7 +138,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .ph-dot-it{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700}
 .ph-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 /* GUID styled container */
-.guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border-radius:var(--rxs);padding:5px 10px;width:100%;max-width:300px}
+.guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rxs);padding:5px 10px;width:100%;max-width:300px}
 .guid-text{font-size:9px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
 /* QR count badge */
 .qr-count-badge{background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted)}
@@ -159,7 +165,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .prob-meta{font-size:10px;color:var(--muted);margin-top:2px}
 .prob-cnt{font-size:12px;font-weight:700;flex-shrink:0}
 /* PHARMACIES */
-.filter-row{display:flex;gap:8px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.filter-row{display:flex;gap:8px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;align-items:center}
 .ph-srch{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rs);padding:8px 12px}
 .ph-srch input{flex:1;background:none;border:none;outline:none;color:var(--ink)}
 .ph-srch input::placeholder{color:var(--muted)}
@@ -186,7 +192,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .qr-pos-name{font-size:18px;font-weight:800;text-align:center;letter-spacing:-.3px;color:var(--ink);max-width:280px;word-break:break-word}
 .qr-wrap{background:#fff;border-radius:16px;padding:14px;box-shadow:0 0 0 1px var(--accent-border),var(--sh2)}
 .qr-wrap canvas,.qr-wrap img{display:block}
-.qr-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.qr-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
 .qr-badge.ok{background:var(--ok-soft);color:var(--ok)}
 .qr-badge.warn{background:var(--warn-soft);color:var(--warn)}
 .qr-badge.late{background:var(--late-soft);color:var(--late)}
@@ -202,9 +208,9 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .qr-hint{font-size:11px;color:var(--muted-2);text-align:center}
 .qr-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--card);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh1);color:var(--ink-2);z-index:2;transition:background .12s}
 .qr-nav:active{background:var(--bg-soft)}
-.qr-nav:disabled{opacity:.25;cursor:default}
+.qr-nav:disabled{opacity:.25;cursor:default;touch-action:none;pointer-events:none}
 .qr-nav.prev{left:0}.qr-nav.next{right:0}
-.qr-chips{display:flex;gap:6px;padding:10px 16px 12px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--card)}
+.qr-chips{display:flex;gap:6px;padding:10px 16px 14px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft)}
 .qr-chips::-webkit-scrollbar{display:none}
 .qr-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--card);color:var(--ink-2);flex-shrink:0;transition:all .12s;min-height:34px;display:inline-flex;align-items:center;gap:5px}
 .qr-chip.act{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);border-width:1.5px}
@@ -251,13 +257,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .eq-det-meta{font-size:11px;color:var(--muted)}
 
 /* PULSE BAR */
-.pulse-bar{display:flex;align-items:center;padding:0 16px;height:36px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.pulse-bar::-webkit-scrollbar{display:none}
-.pb-pills{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-.pb-pill{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
-.pb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.pb-cnt{font-size:13px;font-weight:800;letter-spacing:-.3px}
-.pb-lbl{font-size:10px;font-weight:600;color:var(--muted)}
+/* ── PULSE BAR ── (removed in Batch 8b — see Roadmap principle: no duplicated context) */
 .pb-period{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--muted-2);flex-shrink:0;margin-left:auto;padding-left:8px}
 /* TILE SUB */
 .ov-tile{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;box-shadow:var(--sh1)}
@@ -272,7 +272,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .eq-item-name{font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eq-item-sub{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500}
 /* EQ CARD MINI-BAR SPACING */
-.eq-card .mini-bar{margin:7px 0 6px}
+.eq-card .mini-bar{margin:7px 0 6px;max-width:70%;width:100%}
 /* EQ CARD CHEVRON */
 .eq-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
 .eq-chev{color:var(--muted-2);flex-shrink:0;align-self:center;margin-left:6px}
@@ -287,14 +287,17 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
       <button class="sr-pill" id="srBtn">
         <div class="avatar" id="srAv">Б</div>
         <span class="sr-nm" id="srNm">Бутуліна Владислава</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg class="chev-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <button class="icon-btn" id="btnTheme" aria-label="Тема">
         <svg id="thIco" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
+    <div class="timestamp">
+      <span class="live-dot"></span>
+      <span>Оновлено: <span id="genT">—</span></span>
+    </div>
   </header>
-  <div class="pulse-bar" id="pulseBar"></div>
   <div id="ph-banner" style="display:none"></div>
   <div id="ctx-layer" class="ctx-layer"></div>
   <div class="screens">
@@ -429,30 +432,15 @@ function miniBar(ok,w,l,c){
 }
 
 
-// ── PULSE BAR ──
-function renderPulseBar(){
-  const d=sr();
-  const now=new Date();
-  const dateStr=now.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const pills=[
-    {st:'ok',v:d.ok,l:'ОК'},
-    {st:'warn',v:d.w,l:'Перевир.'},
-    {st:'late',v:d.l,l:'Давно'},
-    {st:'crit',v:d.c,l:'Критично'}
-  ].filter(p=>p.v>0);
-  document.getElementById('pulseBar').innerHTML=
-    '<div class="pb-pills">'+
-    pills.map(p=>`<div class="pb-pill" style="color:var(--${p.st})"><div class="pb-dot" style="background:var(--${p.st})"></div><span class="pb-cnt">${p.v}</span><span class="pb-lbl">${p.l}</span></div>`).join('')+
-    '</div>'+
-    `<div class="pb-period"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${dateStr}</div>`;
-}
 // ── HEADER ──
 function renderHeader(){
   const nm=sr().n;
   document.getElementById('srAv').textContent=nm.charAt(0);
   document.getElementById('srNm').textContent=nm;
   const now=new Date();
-
+  document.getElementById('genT').textContent=
+    now.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'})+
+    ' '+now.toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'});
 }
 
 // ── BANNER ──
@@ -474,15 +462,16 @@ function renderBanner(){
 function renderCtxLayer(){
   const d=sr();const o=out();const t=d.t||1;
   const el=document.getElementById('ctx-layer');
-  if(S.tab==='pharmacies')return; // handled by renderPharmacies
+  if(S.tab==='pharmacies'){el.style.display='none';return;} // no ctx-layer on Tab 2 — counter is in filter-row
+  el.style.display='';  // reset to CSS default each time
   if(S.tab==='overview'){
     const pct=Math.round(d.ok/t*100);
-    el.innerHTML=`<span class="cl-main">${d.ok}/${t} відскановано · ${pct}%</span><div class="cl-dots">${dotRowCl(d.ok,d.w,d.l,d.c)}</div>`;
+    el.innerHTML=`<span class="cl-main">${d.ok}/${t} відскановано · ${pct}%</span>`;
   } else if(S.tab==='qr'){
     if(o){
-      const oi=o.i;const okC=oi.filter(x=>x.st==='ok').length,wC=oi.filter(x=>x.st==='warn').length,lC=oi.filter(x=>x.st==='late').length,cC=oi.filter(x=>x.st==='crit').length;
-      el.innerHTML=`<span class="cl-sub" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.a}</span><div class="cl-dots">${dotRowCl(okC,wC,lC,cC)}</div>`;
+      el.style.display='none';return;
     } else {
+      el.style.display='';
       el.innerHTML=`<span class="cl-sub">Оберіть аптеку для перегляду QR-кодів</span>`;
     }
   } else if(S.tab==='equipment'){
@@ -558,8 +547,7 @@ function renderOverview(){
           <div class="prob-addr">${o.a}</div>
           <div class="prob-meta">${o.net||o.city||''}</div>
         </div>
-        ${miniBar(o.ok,o.w,o.l,o.c)}
-        <div class="prob-cnt" style="color:var(--${mst})">${cnt} од.</div>
+        <div class="ph-card-dots" style="margin:0 0 0 auto;flex-shrink:0;gap:8px">${[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}].filter(x=>x.v>0).map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`).join('')}</div>
       </div>`;
     }).join('')
     :`<div style="padding:16px 0;color:var(--ok);font-size:13px;font-weight:600;text-align:center">✓ Все відскановано вчасно</div>`;
@@ -601,7 +589,7 @@ function renderOverview(){
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Критично</div>
         <div class="ov-tile-val" style="color:${d.c>0?'var(--crit)':'var(--ink)'}">${d.c}</div>
-        <div class="ov-tile-sub">${d.c+d.l+d.w} всього проблем.</div>
+        <div class="ov-tile-sub">${d.l+d.w} ще потребують</div>
       </div>
     </div>
     <div class="sec-t">Потребують уваги</div>
@@ -622,9 +610,11 @@ function renderPharmacies(){
 
   const hasF=S.fNet!=='all'||S.fCity!=='all'||S.fSt.length>0;
   document.getElementById('ph-flt-btn').classList.toggle('on',hasF);
-  // Update ctx-layer for pharmacies tab
-  const clEl=document.getElementById('ctx-layer');
-  clEl.innerHTML=`<span class="cl-main">Аптек: ${outs.length}</span><span class="cl-sep">з ${d.o.length}</span><span class="cl-sub" style="flex:1">· ${outs.reduce((s,o)=>s+o.i.length,0)} одиниць</span>${hasF?'<span style="font-size:11px;font-weight:700;color:var(--accent)">Фільтр</span>':''}`;
+  // Counter relocated to search placeholder (Batch 8b) — flt-button on-state shows filter active
+  const inp=document.getElementById('ph-srch-inp');
+  if(inp&&!inp.matches(':focus')){
+    inp.placeholder = `Пошук серед ${d.o.length} аптек`;
+  }
 
   document.getElementById('ph-list').innerHTML=outs.map(o=>{
     const isSel=S.outlet===o.idx;
@@ -762,8 +752,8 @@ function renderEquipment(){
   const o=out();
   _eqTypes=getEqTypes(d);
   if(o){
-    // Outlet selected: list items for this pharmacy
-    document.getElementById('eq-list').innerHTML=`<div style="height:8px"></div>`+o.i.map(it=>`
+    // Outlet selected: card-style items like eq-card
+    document.getElementById('eq-list').innerHTML=`<div class="eq-cards">`+o.i.map(it=>`
       <div class="eq-item">
         <div class="eq-item-body">
           <div class="eq-item-name">${it.pos}</div>
@@ -771,7 +761,7 @@ function renderEquipment(){
         </div>
         ${stBadge(it.st)}
         <svg style="color:var(--muted-2);flex-shrink:0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>`).join('')+'<div class="h16"></div>';
+      </div>`).join('')+`</div>`;
     return;
   }
   // No outlet: aggregate card view
@@ -807,6 +797,8 @@ function setTab(t){
   if(qa)qa._sw=false;
   // Reset app-bar scroll elevation on tab switch
   document.querySelector('.app-bar').classList.remove('scrolled');
+  // Tab 2: unify app-bar with filter-row (no border between them)
+  document.querySelector('.app-bar').classList.toggle('unified-filter',t==='pharmacies');
   render();
 }
 document.querySelector('.bottom-nav').addEventListener('click',e=>{
@@ -938,8 +930,15 @@ document.querySelectorAll('.scroll-a').forEach(el=>{
     }
   },{passive:true});
 });
+// ── PINCH-ZOOM BLOCK (Batch 8b) ──
+// iOS Safari ignores user-scalable=no in viewport meta; gesture events are the reliable way.
+// touch-action:pan-x pan-y on html/body covers other engines.
+['gesturestart','gesturechange','gestureend'].forEach(ev=>{
+  document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
+});
+
 // ── INIT ──
-function render(){renderHeader();renderPulseBar();renderBanner();renderCtxLayer();renderTab();}
+function render(){renderHeader();renderBanner();renderCtxLayer();renderTab();}
 render();
 
 </script>
