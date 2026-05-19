@@ -6,6 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QR Lens">
+<!-- Batch 8i PWA-SPLASH-FIX: theme-color для switcher between iOS dark/light splash + усуває білий flash при відкритті PWA -->
+<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme:dark)">
+<meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme:light)">
 <title>QR Lens</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -56,6 +59,9 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body,#app{touch-action:pan-x pan-y}
+/* Batch 8i PWA-SPLASH-FIX: html background fallback на dark/light до load CSS (миттєвий фон під час PWA splash) */
+html{background:#0d1117}
+@media(prefers-color-scheme:light){html{background:#f7f4ec}}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--card)}
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 *{-webkit-tap-highlight-color:transparent}
@@ -157,7 +163,8 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .ph-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 /* GUID styled container */
 .guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rxs);padding:5px 10px;width:100%;max-width:300px}
-.guid-text{font-size:9px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
+/* Batch 8i GUID-TYPOGRAPHY: font 9→12px + letter-spacing 0.5px (текст займав ~30% висоти контейнера — диспропорція; padding не чіпаємо) */
+.guid-text{font-size:12px;letter-spacing:0.5px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
 /* QR count badge */
 .qr-count-badge{background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted)}
 /* MINI BAR */
@@ -185,6 +192,8 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 /* PHARMACIES */
 /* Batch 8g TAB2-FILTER-NO-BG: прибрано background:card (була "плитка" з app-bar look). Filter-row тепер лежить на загальному bg без власної карти */
 .filter-row{display:flex;gap:8px;padding:10px 16px;background:transparent;flex-shrink:0;align-items:center}
+/* Batch 8i TAB2-FILTER-AIR: при відсутньому ph-banner (немає вибраної аптеки) додаємо повітря над filter-row — стик з app-bar буде trischki тісним без banner між ними */
+body:not(.has-banner) #sc-pharmacies .filter-row{margin-top:4px}
 .ph-srch{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rs);padding:8px 12px}
 .ph-srch input{flex:1;background:none;border:none;outline:none;color:var(--ink)}
 .ph-srch input::placeholder{color:var(--muted)}
@@ -213,7 +222,8 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .ph-card.sel .ph-rank{background:var(--accent);color:#fff}
 /* QR SCREEN */
 .qr-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.qr-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 20px;gap:8px;position:relative;overflow:hidden;touch-action:pan-y}
+/* Batch 8i QR-AREA-DISTRIBUTE: center → space-between (name до верху, guid-box до низу, QR+badge+counter+dots розподілені посередині). padding-top 12→8 (менше повітря до ph-banner). */
+.qr-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 20px 12px;gap:8px;position:relative;overflow:hidden;touch-action:pan-y}
 .qr-pos-name{font-size:18px;font-weight:800;text-align:center;letter-spacing:-.3px;color:var(--ink);max-width:280px;word-break:break-word}
 .qr-wrap{background:#fff;border-radius:16px;padding:14px;box-shadow:0 0 0 1px var(--accent-border),var(--sh2)}
 .qr-wrap canvas,.qr-wrap img{display:block}
@@ -246,13 +256,19 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .qr-chip.late{border-color:var(--late)}.qr-chip.crit{border-color:var(--crit)}
 /* Batch 8h TAB3-VIEWPORT-FIT: при tight viewport (Safari toolbar активний, vh<720) зменшуємо розміри QR area щоб все вміщалось.
    visualViewport API tracking через JS додає body.tight-vh при необхідності. */
-body.tight-vh .qr-area{padding:8px 20px;gap:4px}
+/* Batch 8i: додано justify-content:flex-start (override проти нового space-between default); guid-text 9→10 (узгоджено з новим базовим 12) */
+body.tight-vh .qr-area{justify-content:flex-start;padding:8px 20px;gap:4px}
 body.tight-vh .qr-pos-name{font-size:15px}
 body.tight-vh .qr-wrap{padding:10px}
 body.tight-vh .qr-wrap canvas,body.tight-vh .qr-wrap img{width:200px!important;height:200px!important}
 body.tight-vh .qr-badge{padding:3px 8px;font-size:10px}
 body.tight-vh .qr-count-badge{font-size:10px;padding:2px 8px}
-body.tight-vh .guid-text{font-size:9px}
+body.tight-vh .guid-text{font-size:10px;letter-spacing:0.3px}
+/* Batch 8i PWA-ROOMY-VH: при vh>790 (PWA + Safari toolbar OFF на iPhone 13/14/15 Pro+) — luxury режим з QR 260×260, name 20px, gap 12px. */
+body.roomy-vh .qr-wrap canvas,body.roomy-vh .qr-wrap img{width:260px!important;height:260px!important}
+body.roomy-vh .qr-wrap{padding:16px}
+body.roomy-vh .qr-pos-name{font-size:20px}
+body.roomy-vh .qr-area{gap:12px}
 /* EQUIPMENT */
 .eq-sum{display:flex;gap:20px;padding:10px 16px;background:var(--bg-soft);border-bottom:1px solid var(--border);flex-shrink:0}
 .eq-sum-it{display:flex;flex-direction:column;gap:1px}
@@ -491,8 +507,10 @@ function renderHeader(){
 function renderBanner(){
   const el=document.getElementById('ph-banner');
   const o=out();
-  if(!o){el.style.display='none';return;}
+  // Batch 8i TAB2-FILTER-AIR: body.has-banner стан для CSS-aware filter-row spacing
+  if(!o){el.style.display='none';document.body.classList.remove('has-banner');return;}
   el.style.display='flex';
+  document.body.classList.add('has-banner');
   el.innerHTML=`
     <div class="ph-b-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
     <div class="ph-b-body">
@@ -969,15 +987,19 @@ document.getElementById('btnTheme').addEventListener('click',()=>{
   if(sab>0){const d=window.innerHeight-(screen.height-sab);if(d>sab*.5)document.documentElement.classList.add('pwa-full');}
 })();
 
-// ── VIEWPORT FIT ── (Batch 8h TAB3-VIEWPORT-FIT)
+// ── VIEWPORT FIT ── (Batch 8h TAB3-VIEWPORT-FIT + Batch 8i PWA-ROOMY-VH)
 // Реактивне відстеження висоти viewport через visualViewport API (синхронно з Safari toolbar появою/зникненням).
-// При vh<720 додаємо body.tight-vh — CSS зменшує QR area елементи щоб все вміщалось без обрізання.
-// Threshold 720 обрано як межа: iPhone Safari з toolbar ≈ 668-745 (різні моделі), iPhone PWA ≈ 800+, iPhone Safari без toolbar ≈ 800+.
+// 3-режимна архітектура:
+//   vh<720    → body.tight-vh   (iPhone SE / Safari toolbar активний на старих пристроях)
+//   720-790   → default          (Safari toolbar ON на сучасних, iPhone XS PWA)
+//   vh>790    → body.roomy-vh    (PWA на iPhone Pro+, Safari toolbar OFF на сучасних — luxury mode)
+// Threshold 790 обрано як межа: iPhone XS PWA=778 (default), iPhone 15 Pro Safari OFF=810 / PWA=830 (roomy).
 (function(){
   const vv=window.visualViewport;
   function checkVh(){
     const vh=vv?vv.height:window.innerHeight;
     document.body.classList.toggle('tight-vh',vh<720);
+    document.body.classList.toggle('roomy-vh',vh>790);
   }
   if(vv){
     vv.addEventListener('resize',checkVh);
