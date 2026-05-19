@@ -168,7 +168,8 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .prob-meta{font-size:10px;color:var(--muted);margin-top:2px}
 .prob-cnt{font-size:12px;font-weight:700;flex-shrink:0}
 /* PHARMACIES */
-.filter-row{display:flex;gap:8px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;align-items:center}
+/* Batch 8g TAB2-FILTER-NO-BG: прибрано background:card (була "плитка" з app-bar look). Filter-row тепер лежить на загальному bg без власної карти */
+.filter-row{display:flex;gap:8px;padding:10px 16px;background:transparent;flex-shrink:0;align-items:center}
 .ph-srch{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rs);padding:8px 12px}
 .ph-srch input{flex:1;background:none;border:none;outline:none;color:var(--ink)}
 .ph-srch input::placeholder{color:var(--muted)}
@@ -186,9 +187,12 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .ph-card-i{flex:1;min-width:0}
 .ph-card-addr{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;word-break:break-word}
 .ph-card-meta{font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ph-card-r{flex-shrink:0;text-align:right}
-.ph-card-cnt{font-size:15px;font-weight:800;color:var(--ink)}
+.ph-card-r{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:50px}
+.ph-card-rtop{display:flex;align-items:baseline;gap:3px}
+.ph-card-cnt{font-size:15px;font-weight:800;color:var(--ink);line-height:1}
 .ph-card-unit{font-size:10px;color:var(--muted)}
+/* Batch 8g TAB2-CARD-COMPACT: dots переміщено в right column поряд з cnt — картка стиснута ~46% */
+.ph-card-dots-r{display:flex;gap:6px;align-items:center;margin-top:2px}
 /* QR SCREEN */
 .qr-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .qr-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 20px;gap:8px;position:relative;overflow:hidden;touch-action:pan-y}
@@ -209,10 +213,11 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .copy-btn{width:28px;height:28px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rxs);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;flex-shrink:0;transition:background .12s}
 .copy-btn:active{background:var(--border)}
 .qr-hint{font-size:11px;color:var(--muted-2);text-align:center}
-.qr-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--card);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh1);color:var(--ink-2);z-index:2;transition:background .12s}
-.qr-nav:active{background:var(--bg-soft)}
-.qr-nav:disabled{opacity:.25;cursor:default;touch-action:none;pointer-events:none}
-.qr-nav.prev{left:0}.qr-nav.next{right:0}
+/* Batch 8g QR-NAV-REDESIGN: чистіший дизайн стрілок — без кола, м'який скругл, tap state з teal accent */
+.qr-row{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;pointer-events:auto}
+.qr-nav{display:flex;align-items:center;justify-content:center;width:36px;height:44px;border-radius:14px;background:transparent;border:none;cursor:pointer;color:var(--ink-2);transition:background .15s,transform .12s,opacity .15s;pointer-events:auto;flex-shrink:0}
+.qr-nav:active{background:var(--accent-soft);transform:scale(.92);color:var(--accent)}
+.qr-nav:disabled{opacity:.2;cursor:default;pointer-events:none}
 .qr-chips{display:flex;gap:6px;padding:8px 16px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-top:1px solid var(--border);background:var(--bg-soft);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
 .qr-chips::-webkit-scrollbar{display:none}
 .qr-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--card);color:var(--ink-2);flex-shrink:0;transition:all .12s;min-height:34px;display:inline-flex;align-items:center;gap:5px}
@@ -642,11 +647,13 @@ function renderPharmacies(){
       <div class="ph-card-i">
         <div class="ph-card-addr">${o.a}</div>
         <div class="ph-card-meta">${o.net||''}${o.city?' · '+o.city:''}</div>
-        ${dots?`<div class="ph-card-dots">${dots}</div>`:''}
       </div>
       <div class="ph-card-r">
-        <div class="ph-card-cnt">${o.i.length}</div>
-        <div class="ph-card-unit">одиниць</div>
+        <div class="ph-card-rtop">
+          <div class="ph-card-cnt">${o.i.length}</div>
+          <div class="ph-card-unit">од.</div>
+        </div>
+        ${dots?`<div class="ph-card-dots-r">${dots}</div>`:''}
       </div>
     </div>`;
   }).join('')||`<div style="padding:32px;text-align:center;color:var(--muted)">Нічого не знайдено</div>`;
@@ -670,10 +677,14 @@ function renderQR(){
   const dots=items.length>1?items.map((_,i)=>`<div class="qr-dot${i===idx?' act':''}"></div>`).join(''):'';
 
   document.getElementById('qr-area').innerHTML=`
-    ${items.length>1?`<button class="qr-nav prev" onclick="prevQR()" ${idx===0?'disabled':''}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>`:''}
     <div id="qr-content" style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;pointer-events:none">
       <div class="qr-pos-name">${it.pos}</div>
-      <div class="qr-wrap" id="qr-box"></div>
+      <!-- Batch 8g QR-NAV-RECENTER: QR + nav в одному flex-row → стрілки гарантовано на рівні QR центру -->
+      <div class="qr-row">
+        ${items.length>1?`<button class="qr-nav" onclick="prevQR()" ${idx===0?'disabled':''} aria-label="Попередній"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>`:''}
+        <div class="qr-wrap" id="qr-box"></div>
+        ${items.length>1?`<button class="qr-nav" onclick="nextQR()" ${idx===items.length-1?'disabled':''} aria-label="Наступний"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}
+      </div>
       <div class="qr-badge ${it.st}">
         <div style="width:7px;height:7px;border-radius:50%;background:currentColor"></div>
         ${ST_LBL[it.st]} · ${ST_D[it.st]}
@@ -684,14 +695,13 @@ function renderQR(){
         <div class="guid-text">${it.qr}</div>
         <button class="copy-btn" id="copy-btn" onclick="copyG()" style="pointer-events:auto"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
       </div>
-    </div>
-    ${items.length>1?`<button class="qr-nav next" onclick="nextQR()" ${idx===items.length-1?'disabled':''}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}`;
+    </div>`;
 
   // Generate QR
   const box=document.getElementById('qr-box');
   box.innerHTML='';
   try{
-    new QRCode(box,{text:it.qr,width:200,height:200,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
+    new QRCode(box,{text:it.qr,width:240,height:240,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
   }catch(e){
     box.innerHTML='<div style="width:200px;height:200px;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;border-radius:4px">QR недоступний</div>';
   }
