@@ -78,12 +78,23 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 .sr-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .icon-btn{width:36px;height:36px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;color:var(--ink-2);flex-shrink:0;cursor:pointer;transition:background .12s}
 .icon-btn:active{background:var(--border)}
+/* Batch 8h THEME-TOGGLE-V2: cross-fade sun/moon — opacity only (universal iOS/Android compat, без transform quirks).
+   Default state (no data-theme) — місяць (вже dark-by-default). */
+.th-svg{overflow:visible}
+.th-svg .th-sun,.th-svg .th-moon{transition:opacity .25s ease;transform-origin:center}
+.th-svg .th-sun{opacity:0}
+.th-svg .th-moon{opacity:1}
+[data-theme="light"] .th-svg .th-sun{opacity:1}
+[data-theme="light"] .th-svg .th-moon{opacity:0}
+[data-theme="dark"] .th-svg .th-sun{opacity:0}
+[data-theme="dark"] .th-svg .th-moon{opacity:1}
 .chev-ico{color:var(--muted);flex-shrink:0}
 .timestamp{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0;animation:livePulse 2s ease-in-out infinite}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
 /* BANNER */
-#ph-banner{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--bg-soft);border-bottom:1px solid var(--border);border-left:3px solid var(--accent);flex-shrink:0}
+/* Batch 8h TAB2-AIR-TOP: padding-top збільшено з 6→8px для air між app-bar і ph-banner */
+#ph-banner{display:flex;align-items:center;gap:8px;padding:8px 12px 7px;background:var(--bg-soft);border-bottom:1px solid var(--border);border-left:3px solid var(--accent);flex-shrink:0}
 .ph-b-ico{color:var(--accent);flex-shrink:0;display:flex;align-items:center}
 .ph-b-body{flex:1;min-width:0}
 .ph-b-addr{font-size:12px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -95,9 +106,13 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 .screen.active{display:flex}
 .scroll-a{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 /* NAV */
-.bottom-nav{display:flex;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding:2px 8px;padding-bottom:calc(2px + var(--sab))}
-html.pwa-full .nav-i{padding-top:4px;padding-bottom:4px}
-.nav-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:4px 4px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:600;transition:color .15s,background .15s;cursor:pointer}
+/* Batch 8h BOTTOM-NAV-REBALANCE: повернуто KPI Lens patten — justify-center + symmetric padding.
+   Скасовує 8e TAB-BAR-COMPACT (flex-end + малий padding), що в PWA mode давало надмірну порожнечу між іконками і home indicator. */
+.bottom-nav{display:flex;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:8px}
+@media(display-mode:standalone){.bottom-nav{padding-bottom:0}}
+html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
+.nav-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:600;transition:color .15s,background .15s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav-i:active{background:var(--bg-soft)}
 .nav-i svg{width:20px;height:20px;transition:stroke .15s}
 .nav-i.act{color:var(--accent)}
 /* UTILS */
@@ -193,6 +208,9 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .ph-card-unit{font-size:10px;color:var(--muted)}
 /* Batch 8g TAB2-CARD-COMPACT: dots переміщено в right column поряд з cnt — картка стиснута ~46% */
 .ph-card-dots-r{display:flex;gap:6px;align-items:center;margin-top:2px}
+/* Batch 8h TAB2-CARD-RANK: нумерація карток (порт .tt-rank з KPI Lens) — кругла 22×22 плашка з номером, при isSel — accent background + #fff */
+.ph-rank{width:22px;height:22px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;transition:background .12s,color .12s}
+.ph-card.sel .ph-rank{background:var(--accent);color:#fff}
 /* QR SCREEN */
 .qr-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .qr-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 20px;gap:8px;position:relative;overflow:hidden;touch-action:pan-y}
@@ -226,6 +244,15 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 [data-theme="dark"] .qr-chip.act,:root:not([data-theme="light"]) .qr-chip.act{background:rgba(42,140,132,.22);color:#7DDFD7;border-color:#3DA8A0;font-weight:700;box-shadow:0 0 0 1px rgba(125,223,215,.15)}
 .qr-chip.ok{border-color:var(--ok)}.qr-chip.warn{border-color:var(--warn)}
 .qr-chip.late{border-color:var(--late)}.qr-chip.crit{border-color:var(--crit)}
+/* Batch 8h TAB3-VIEWPORT-FIT: при tight viewport (Safari toolbar активний, vh<720) зменшуємо розміри QR area щоб все вміщалось.
+   visualViewport API tracking через JS додає body.tight-vh при необхідності. */
+body.tight-vh .qr-area{padding:8px 20px;gap:4px}
+body.tight-vh .qr-pos-name{font-size:15px}
+body.tight-vh .qr-wrap{padding:10px}
+body.tight-vh .qr-wrap canvas,body.tight-vh .qr-wrap img{width:200px!important;height:200px!important}
+body.tight-vh .qr-badge{padding:3px 8px;font-size:10px}
+body.tight-vh .qr-count-badge{font-size:10px;padding:2px 8px}
+body.tight-vh .guid-text{font-size:9px}
 /* EQUIPMENT */
 .eq-sum{display:flex;gap:20px;padding:10px 16px;background:var(--bg-soft);border-bottom:1px solid var(--border);flex-shrink:0}
 .eq-sum-it{display:flex;flex-direction:column;gap:1px}
@@ -300,7 +327,11 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
         <svg class="chev-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <button class="icon-btn" id="btnTheme" aria-label="Тема">
-        <svg id="thIco" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <!-- Batch 8h THEME-TOGGLE-V2: SVG з обома paths (sun + moon), перемикання через CSS opacity transitions -->
+        <svg class="th-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <g class="th-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
+          <g class="th-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g>
+        </svg>
       </button>
     </div>
     <div class="timestamp">
@@ -637,13 +668,14 @@ function renderPharmacies(){
     inp.placeholder = `Адреса, мережа · ${d.o.length} аптек`;
   }
 
-  document.getElementById('ph-list').innerHTML=outs.map(o=>{
+  document.getElementById('ph-list').innerHTML=outs.map((o,i)=>{
     const isSel=S.outlet===o.idx;
     const dots=[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}]
       .filter(x=>x.v>0)
       .map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`)
       .join('');
     return `<div class="ph-card${isSel?' sel':''}" onclick="selectOutlet(${o.idx})">
+      <div class="ph-rank">${i+1}</div>
       <div class="ph-card-i">
         <div class="ph-card-addr">${o.a}</div>
         <div class="ph-card-meta">${o.net||''}${o.city?' · '+o.city:''}</div>
@@ -919,19 +951,14 @@ function addSwipeClose(bgId,closeFn){
 document.getElementById('ph-srch-inp').addEventListener('input',e=>{S.phSrch=e.target.value;renderPharmacies();});
 
 // ── THEME ──
+// Batch 8h THEME-TOGGLE-V2: CSS-driven cross-fade — updThIco видалено (більше не потрібен path swap)
 function isDark(){
   const t=document.documentElement.getAttribute('data-theme');
   return t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);
 }
 document.getElementById('btnTheme').addEventListener('click',()=>{
   document.documentElement.setAttribute('data-theme',isDark()?'light':'dark');
-  updThIco();
 });
-function updThIco(){
-  document.getElementById('thIco').innerHTML=isDark()
-    ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
-    :'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
-}
 
 // ── IOS ──
 // B2a Batch 8c: pinch-zoom listeners consolidated to single registration below (was 2× = 6 listeners).
@@ -940,6 +967,25 @@ function updThIco(){
   if(!isS)return;
   const sab=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0;
   if(sab>0){const d=window.innerHeight-(screen.height-sab);if(d>sab*.5)document.documentElement.classList.add('pwa-full');}
+})();
+
+// ── VIEWPORT FIT ── (Batch 8h TAB3-VIEWPORT-FIT)
+// Реактивне відстеження висоти viewport через visualViewport API (синхронно з Safari toolbar появою/зникненням).
+// При vh<720 додаємо body.tight-vh — CSS зменшує QR area елементи щоб все вміщалось без обрізання.
+// Threshold 720 обрано як межа: iPhone Safari з toolbar ≈ 668-745 (різні моделі), iPhone PWA ≈ 800+, iPhone Safari без toolbar ≈ 800+.
+(function(){
+  const vv=window.visualViewport;
+  function checkVh(){
+    const vh=vv?vv.height:window.innerHeight;
+    document.body.classList.toggle('tight-vh',vh<720);
+  }
+  if(vv){
+    vv.addEventListener('resize',checkVh);
+    vv.addEventListener('scroll',checkVh);
+  }else{
+    window.addEventListener('resize',checkVh);
+  }
+  checkVh();
 })();
 
 
