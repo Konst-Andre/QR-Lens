@@ -205,6 +205,31 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .prob-addr{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prob-meta{font-size:10px;color:var(--muted);margin-top:2px}
 .prob-cnt{font-size:12px;font-weight:700;flex-shrink:0}
+/* ============ Batch 15 TAB1-CHIP-PAIR ============ */
+.chip-pair{display:flex;gap:8px;margin-bottom:10px}
+.chip-pair-it{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--card);color:var(--ink-2);font-size:12px;font-weight:700;cursor:pointer;transition:all .12s;box-shadow:var(--sh1)}
+.chip-pair-it:active{background:var(--bg-soft)}
+.chip-pair-it.act{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.chip-pair-it .cp-ico{display:flex;align-items:center}
+.chip-pair-it .cp-cnt{font-size:11px;font-weight:700;opacity:.7;margin-left:2px}
+/* ============ Batch 15 TAB1-OUTLET-CTA ============ */
+.cta-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:13px 14px;border-radius:var(--rs);border:1px solid var(--border);background:var(--card);color:var(--ink);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;box-shadow:var(--sh1);margin-bottom:10px;font-family:inherit}
+.cta-btn:active{background:var(--card-2);border-color:var(--border-2)}
+.cta-btn.crit{background:var(--crit-soft);border-color:var(--crit)}
+.cta-btn.late{background:var(--late-soft);border-color:var(--late)}
+.cta-btn.warn{background:var(--warn-soft);border-color:var(--warn)}
+.cta-btn-l{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.cta-btn-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cta-btn-dot.crit{background:var(--crit)}
+.cta-btn-dot.late{background:var(--late)}
+.cta-btn-dot.warn{background:var(--warn)}
+.cta-btn-dot.neutral{background:var(--muted)}
+.cta-btn-txt{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cta-btn-cnt{font-weight:800;opacity:.85;flex-shrink:0}
+/* ============ Batch 15 TAB1-OK-BADGE ============ */
+.ok-badge{display:flex;justify-content:center;padding:12px 0 14px;margin-bottom:0}
+.ok-badge-it{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:var(--ok-soft);color:var(--ok);border-radius:999px;font-size:13px;font-weight:700}
+.ok-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
 /* PHARMACIES */
 /* Batch 8g TAB2-FILTER-NO-BG: прибрано background:card (була "плитка" з app-bar look). Filter-row тепер лежить на загальному bg без власної карти */
 .filter-row{display:flex;gap:8px;padding:10px 16px;background:transparent;flex-shrink:0;align-items:center}
@@ -318,7 +343,7 @@ body.roomy-vh .qr-area{gap:12px}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 8px}
 .chip{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--card);color:var(--ink-2);transition:all .12s}
 .chip.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-.sh-reset{display:block;width:calc(100% - 32px);margin:8px 16px 0;padding:11px;border-radius:var(--rs);border:1px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+.sh-reset{display:block;width:calc(100% - 32px);margin:16px 16px 0;padding:11px;border-radius:var(--rs);border:1px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
 .sh-reset:active{background:var(--bg-soft)}
 .sr-opt{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;color:var(--ink-2)}
 .sr-opt:last-child{border-bottom:none}
@@ -517,7 +542,9 @@ const S = {
   // Batch 9 EQ-STATE: фільтри Tab 4 (Equipment)
   eqSrch: '',
   eqFBrand: 'all',
-  eqFSt: []
+  eqFSt: [],
+  // Batch 15 TAB1-MODE: режим SR list — 'top' (за обладнанням) | 'focus' (потребують уваги)
+  tab1Mode: 'top'
   // Batch 9.1: eqFCat прибрано — категорія зайва, фільтр Бренд+Критичність достатній
 };
 
@@ -607,23 +634,25 @@ function renderCtxLayer(){
 function renderOverview(){
   const d=sr();
   const o=out();
+  const ovEl=document.getElementById('ov-content');
   // Per-outlet mode
   if(o){
-    // Batch 13 EMPTY-OUTLET-OV: empty-state для аптек без обладнання (parity з Tab 3/Tab 4)
+    // Batch 15 TAB1-OUTLET-EMPTY-PAD: empty-state без верхнього padding (вирівнювання з Tab 3 empty)
     if(!o.i.length){
-      document.getElementById('ov-content').innerHTML=`<div class="empty-state">
+      ovEl.style.padding='0';
+      ovEl.innerHTML=`<div class="empty-state">
           <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
           <div class="empty-txt">Немає обладнання</div>
           <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>
         </div>`;
       return;
     }
+    ovEl.style.padding='12px 16px 0';
     const items=o.i,total=items.length||1;
     const okC=items.filter(x=>x.st==='ok').length,wC=items.filter(x=>x.st==='warn').length,lC=items.filter(x=>x.st==='late').length,cC=items.filter(x=>x.st==='crit').length;
     const pct=n=>Math.round(n/total*100)+'%';
-    const probItems=[...items.filter(x=>x.st==='crit'),...items.filter(x=>x.st==='late'),...items.filter(x=>x.st==='warn')];
-    document.getElementById('ov-content').innerHTML=`
-      <div style="height:4px"></div>
+    // Batch 15 TAB1-OUTLET-A4.1: Smart CTA замість prob-list (planning tool, не fix-it)
+    ovEl.innerHTML=`
       <div class="prog-block">
         <div class="prog-label">${okC} / ${total} відскановано (${Math.round(okC/total*100)}%)</div>
         <div class="prog-bar-wrap">
@@ -639,54 +668,65 @@ function renderOverview(){
           <div class="pl-it"><span class="pl-dot" style="background:var(--crit)"></span>Критично ${cC}</div>
         </div>
       </div>
-      ${probItems.length?`
-        <div class="sec-t">Потребують уваги</div>
-        <div class="prob-list">
-          ${probItems.map(it=>`
-            <div class="prob-row" onclick="goToQR('${it.qr}')">
-              <div class="prob-num" style="background:var(--${it.st});color:#fff"><div style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.7)"></div></div>
-              <div class="prob-info">
-                <div class="prob-addr">${it.pos}</div>
-                <div class="prob-meta">${ST_LBL[it.st]} · ${ST_D[it.st]}</div>
-              </div>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>`).join('')}
-        </div>` : `<div style="padding:16px 0;text-align:center"><div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ok)"><div style="width:8px;height:8px;border-radius:50%;background:var(--ok)"></div>Все відскановано вчасно</div></div>`}
+      ${renderOutletCTA(cC, lC, wC, total)}
       <div class="h16"></div>`;
     return;
   }
+  // SR mode (без вибраної аптеки) — Batch 15 TAB1-CHIP-PAIR
+  ovEl.style.padding='12px 16px 0';
   const t=d.t||1;
   const pctN=Math.round(d.ok/t*100);
   const pct=n=>Math.round(n/t*100)+'%';
 
-  const probs=d.o
+  // 2 списки — TOP (за обладнанням) і Фокус (потребують уваги)
+  const topList = d.o
+    .map((o,i)=>({...o,idx:i}))
+    .sort((a,b)=>{
+      const lenDiff = b.i.length - a.i.length;
+      if(lenDiff!==0) return lenDiff;
+      return (b.ok/(b.t||1)) - (a.ok/(a.t||1));
+    })
+    .slice(0,5);
+
+  const focusList = d.o
     .map((o,i)=>({...o,idx:i,w2:o.c*1000+o.l*100+o.w}))
     .filter(o=>o.c>0||o.l>0||o.w>0)
     .sort((a,b)=>b.w2-a.w2)
     .slice(0,5);
 
-  const probHTML=probs.length
-    ?probs.map((o,i)=>{
-      // Batch 13: mst/cnt видалені — prob-num тепер нейтральний (CSS дефолт), worst-color прибрано
-      return `<div class="prob-row" onclick="selectOutlet(${o.idx})">
-        <div class="prob-num">${i+1}</div>
-        <div class="prob-info">
-          <div class="prob-addr">${o.a}</div>
-          <div class="prob-meta">${o.net||o.city||''}</div>
-        </div>
-        <div class="ph-card-dots" style="margin:0 0 0 auto;flex-shrink:0;gap:8px">${[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}].filter(x=>x.v>0).map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`).join('')}</div>
-      </div>`;
-    }).join('')
-    :`<div style="padding:16px 0;color:var(--ok);font-size:13px;font-weight:600;text-align:center">✓ Все відскановано вчасно</div>`;
+  // Спільний row pattern (Batch 13 PROB-NUM-NEUTRAL: дефолтний нейтральний)
+  const renderRow = (o,i) => `
+    <div class="prob-row" onclick="selectOutlet(${o.idx})">
+      <div class="prob-num">${i+1}</div>
+      <div class="prob-info">
+        <div class="prob-addr">${o.a}</div>
+        <div class="prob-meta">${o.net||o.city||''}</div>
+      </div>
+      <div class="ph-card-dots" style="margin:0 0 0 auto;flex-shrink:0;gap:8px">${[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}].filter(x=>x.v>0).map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`).join('')}</div>
+    </div>`;
+
+  const activeList = S.tab1Mode==='top' ? topList : focusList;
+  const listHTML = activeList.length
+    ? activeList.map((o,i)=>renderRow(o,i)).join('')
+    : (S.tab1Mode==='focus'
+        ? `<div style="padding:16px 0;color:var(--ok);font-size:13px;font-weight:600;text-align:center">Все відскановано вчасно</div>`
+        : `<div style="padding:16px 0;color:var(--muted);font-size:13px;text-align:center">Немає даних</div>`);
 
   const critPhC=d.o.filter(o=>o.c>0).length;
-  // Batch 8e TAB1-TILE-SUBS: нові subscripts на основі номенклатури — кожен tile показує унікальну інфо
+  // Batch 8e TAB1-TILE-SUBS: нові subscripts на основі номенклатури
   const cityCount = new Set(d.o.map(o=>o.city)).size;
   const typeCount = new Set(d.o.flatMap(o=>o.i.map(it=>it.pos))).size;
   const cityW = cityCount===1?'місті':'містах';
   const apothW = critPhC===1?'аптеці':'аптеках';
-  document.getElementById('ov-content').innerHTML=`
-    <div style="height:4px"></div>
+
+  // Equipment icon для chip TOP (canonical — той самий, що в ov-tile "Одиниць")
+  const eqIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+  // Flag icon для chip Фокус (watchlist/marker — не bookmark, не target)
+  const flagIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+
+  const focusCount = focusList.length;
+
+  ovEl.innerHTML=`
     <div class="prog-block">
       <div class="prog-label">${d.ok.toLocaleString('uk')} / ${t.toLocaleString('uk')} відскановано (${pctN}%)</div>
       <div class="prog-bar-wrap">
@@ -713,16 +753,64 @@ function renderOverview(){
         <div class="ov-tile-val">${t}</div>
         <div class="ov-tile-sub">${typeCount} типів обладнання</div>
       </div>
-      <!-- Batch 8d TAB1-HERO-3TILES: tile "Вчасно %" видалений — дублював prog-block (той самий %, є progress bar + legend) -->
+      <!-- Batch 8d TAB1-HERO-3TILES: tile "Вчасно %" видалений — дублював prog-block -->
       <div class="ov-tile">
         <div class="ov-tile-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Критично</div>
         <div class="ov-tile-val" style="color:${d.c>0?'var(--crit)':'var(--ink)'}">${d.c}</div>
         <div class="ov-tile-sub">${d.c>0?'У '+critPhC+' '+apothW:'Все в порядку'}</div>
       </div>
     </div>
-    <div class="sec-t">Потребують уваги</div>
-    <div class="prob-list">${probHTML}</div>
+    <div class="chip-pair">
+      <div class="chip-pair-it${S.tab1Mode==='top'?' act':''}" onclick="switchTab1Mode('top')">
+        <span class="cp-ico">${eqIco}</span>Топ
+      </div>
+      <div class="chip-pair-it${S.tab1Mode==='focus'?' act':''}" onclick="switchTab1Mode('focus')">
+        <span class="cp-ico">${flagIco}</span>Фокус${focusCount>0?`<span class="cp-cnt">${focusCount}</span>`:''}
+      </div>
+    </div>
+    <div class="prob-list">${listHTML}</div>
     <div class="h16"></div>`;
+}
+
+// Batch 15 TAB1-OUTLET-CTA: Smart CTA з 4 станами — navigational tone
+function renderOutletCTA(c, l, w, total){
+  if(c>0){
+    return `<button class="cta-btn crit" onclick="ctaToEquip('crit')">
+      <span class="cta-btn-l"><span class="cta-btn-dot crit"></span><span class="cta-btn-txt">Переглянути критичне</span></span>
+      <span class="cta-btn-cnt">${c} ›</span>
+    </button>`;
+  }
+  if(l>0){
+    return `<button class="cta-btn late" onclick="ctaToEquip('late')">
+      <span class="cta-btn-l"><span class="cta-btn-dot late"></span><span class="cta-btn-txt">Переглянути давнє</span></span>
+      <span class="cta-btn-cnt">${l} ›</span>
+    </button>`;
+  }
+  if(w>0){
+    return `<button class="cta-btn warn" onclick="ctaToEquip('warn')">
+      <span class="cta-btn-l"><span class="cta-btn-dot warn"></span><span class="cta-btn-txt">Переглянути нагальне</span></span>
+      <span class="cta-btn-cnt">${w} ›</span>
+    </button>`;
+  }
+  // ALL-OK: ok-badge + neutral CTA
+  return `<div class="ok-badge"><div class="ok-badge-it"><div class="ok-badge-dot"></div>Все ідеально</div></div>
+    <button class="cta-btn" onclick="ctaToEquip(null)">
+      <span class="cta-btn-l"><span class="cta-btn-dot neutral"></span><span class="cta-btn-txt">Все обладнання</span></span>
+      <span class="cta-btn-cnt">${total} ›</span>
+    </button>`;
+}
+
+// Batch 15 TAB1-CTA-ACTION: перехід в Tab 4 з фільтром (або без)
+function ctaToEquip(filter){
+  S.eqFSt = filter ? [filter] : [];
+  setTab('equipment');
+}
+
+// Batch 15 TAB1-MODE-TOGGLE: перемикання SR list режиму
+function switchTab1Mode(mode){
+  if(S.tab1Mode===mode) return;
+  S.tab1Mode = mode;
+  renderOverview();
 }
 
 // ── TAB 2: PHARMACIES ──
