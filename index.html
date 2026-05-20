@@ -124,10 +124,11 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 /* UTILS */
 .sec-t{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .h16{height:16px}
-.empty-state{padding:48px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
-.empty-ico{width:60px;height:60px;background:var(--bg-soft);border-radius:50%;display:flex;align-items:center;justify-content:center}
-.empty-txt{font-size:14px;font-weight:600;color:var(--muted)}
-.empty-hint{font-size:12px;color:var(--muted-2);line-height:1.5}
+/* Batch 14 EMPTY-STATE-V2: vertical centering (justify-content+min-height) + збільшені пропорції — уніфіковано на Tab 1/3/4, PWA/Safari */
+.empty-state{padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:55vh}
+.empty-ico{width:76px;height:76px;background:var(--bg-soft);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.empty-txt{font-size:15px;font-weight:600;color:var(--muted)}
+.empty-hint{font-size:13px;color:var(--muted-2);line-height:1.55}
 .goto-btn{padding:10px 24px;background:var(--accent);color:#fff;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;border:none}
 /* CONTEXTUAL LAYER */
 .ctx-layer{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;min-height:34px}
@@ -400,7 +401,7 @@ body.roomy-vh .qr-area{gap:12px}
     <!-- TAB 3: QR CODES -->
     <div class="screen" id="sc-qr">
       <div class="empty-state" id="qr-empty" style="display:none">
-        <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M14 17h3M17 14h.01M17 17h.01M20 14v3"/></svg></div>
+        <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M14 17h3M17 14h.01M17 17h.01M20 14v3"/></svg></div>
         <div class="empty-txt">Оберіть аптеку</div>
         <div class="empty-hint">Перейдіть до вкладки Аптеки та оберіть аптеку зі списку</div>
         <button class="goto-btn" onclick="setTab('pharmacies')">→ Перейти до Аптек</button>
@@ -610,9 +611,8 @@ function renderOverview(){
   if(o){
     // Batch 13 EMPTY-OUTLET-OV: empty-state для аптек без обладнання (parity з Tab 3/Tab 4)
     if(!o.i.length){
-      document.getElementById('ov-content').innerHTML=`<div style="height:4px"></div>
-        <div class="empty-state">
-          <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      document.getElementById('ov-content').innerHTML=`<div class="empty-state">
+          <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
           <div class="empty-txt">Немає обладнання</div>
           <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>
         </div>`;
@@ -777,7 +777,7 @@ function renderQR(){
   // Batch 13 QR-EMPTY-3STATE: no outlet / empty outlet / normal (раніше empty outlet → TypeError → stale QR)
   if(!o){
     emptyEl.innerHTML=`
-      <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M14 17h3M17 14h.01M17 17h.01M20 14v3"/></svg></div>
+      <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M14 17h3M17 14h.01M17 17h.01M20 14v3"/></svg></div>
       <div class="empty-txt">Оберіть аптеку</div>
       <div class="empty-hint">Перейдіть до вкладки Аптеки та оберіть аптеку зі списку</div>
       <button class="goto-btn" onclick="setTab('pharmacies')">→ Перейти до Аптек</button>`;
@@ -787,7 +787,7 @@ function renderQR(){
   }
   if(!o.i.length){
     emptyEl.innerHTML=`
-      <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
       <div class="empty-txt">Немає обладнання</div>
       <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>`;
     emptyEl.style.display='flex';
@@ -990,7 +990,7 @@ function renderEquipment(){
     // Batch 11 EQ-EMPTY-OUTLET: аптека без обладнання (нові аптеки, ще не встановлено)
     if(!o.i.length){
       document.getElementById('eq-list').innerHTML=`<div class="empty-state">
-        <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div class="empty-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
         <div class="empty-txt">Немає обладнання</div>
         <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>
       </div>`;
