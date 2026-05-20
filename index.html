@@ -198,7 +198,8 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .prob-list{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
 .prob-row{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:var(--sh1);transition:border-color .12s,background .12s}
 .prob-row:active{background:var(--card-2);border-color:var(--border-2)}
-.prob-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+/* Batch 13 PROB-NUM-NEUTRAL: дефолтний нейтральний (як .ph-rank) — узгодженість Tab 1 і Tab 2 ranking номерів */
+.prob-num{width:22px;height:22px;border-radius:50%;background:var(--bg-soft);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
 .prob-info{flex:1;min-width:0}
 .prob-addr{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prob-meta{font-size:10px;color:var(--muted);margin-top:2px}
@@ -586,6 +587,8 @@ function renderCtxLayer(){
     }
   } else if(S.tab==='equipment'){
     if(o){
+      // Batch 13 CTX-EMPTY-FIX: hide ctx-layer для empty outlet (раніше Math.round(0/0*100)="NaN%")
+      if(!o.i.length){el.style.display='none';return;}
       const oi=o.i;const okC=oi.filter(x=>x.st==='ok').length,wC=oi.filter(x=>x.st==='warn').length,lC=oi.filter(x=>x.st==='late').length,cC=oi.filter(x=>x.st==='crit').length;
       const pct=Math.round(okC/oi.length*100);
       // Batch 8d TAB4-CTX-DEDUP: "N одиниць" вже в ph-banner — показуємо % сканування + dots (нова інфо для цієї аптеки)
@@ -597,13 +600,24 @@ function renderCtxLayer(){
     }
   }
   // Batch 8d TAB4-OUTLET-FUSE: візуальне склеювання ph-banner + ctx-layer на Tab 4 з outlet
-  document.body.classList.toggle('tab4-fused', S.tab==='equipment' && !!o);
+  // Batch 13: + умова o.i.length>0 — не fuse якщо empty outlet (ctx-layer прихований у КРОЦІ 4)
+  document.body.classList.toggle('tab4-fused', S.tab==='equipment' && !!o && o.i.length>0);
 }
 function renderOverview(){
   const d=sr();
   const o=out();
   // Per-outlet mode
   if(o){
+    // Batch 13 EMPTY-OUTLET-OV: empty-state для аптек без обладнання (parity з Tab 3/Tab 4)
+    if(!o.i.length){
+      document.getElementById('ov-content').innerHTML=`<div style="height:4px"></div>
+        <div class="empty-state">
+          <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <div class="empty-txt">Немає обладнання</div>
+          <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>
+        </div>`;
+      return;
+    }
     const items=o.i,total=items.length||1;
     const okC=items.filter(x=>x.st==='ok').length,wC=items.filter(x=>x.st==='warn').length,lC=items.filter(x=>x.st==='late').length,cC=items.filter(x=>x.st==='crit').length;
     const pct=n=>Math.round(n/total*100)+'%';
@@ -653,10 +667,9 @@ function renderOverview(){
 
   const probHTML=probs.length
     ?probs.map((o,i)=>{
-      const mst=o.c>0?'crit':o.l>0?'late':'warn';
-      const cnt=o.c+o.l+o.w;
+      // Batch 13: mst/cnt видалені — prob-num тепер нейтральний (CSS дефолт), worst-color прибрано
       return `<div class="prob-row" onclick="selectOutlet(${o.idx})">
-        <div class="prob-num" style="background:var(--${mst});color:#fff">${i+1}</div>
+        <div class="prob-num">${i+1}</div>
         <div class="prob-info">
           <div class="prob-addr">${o.a}</div>
           <div class="prob-meta">${o.net||o.city||''}</div>
@@ -758,9 +771,33 @@ function renderPharmacies(){
 // ── TAB 3: QR ──
 function renderQR(){
   const o=out();
-  document.getElementById('qr-empty').style.display=o?'none':'flex';
-  document.getElementById('qr-main').style.display=o?'flex':'none';
-  if(!o)return;
+  const emptyEl=document.getElementById('qr-empty');
+  const mainEl=document.getElementById('qr-main');
+
+  // Batch 13 QR-EMPTY-3STATE: no outlet / empty outlet / normal (раніше empty outlet → TypeError → stale QR)
+  if(!o){
+    emptyEl.innerHTML=`
+      <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M14 17h3M17 14h.01M17 17h.01M20 14v3"/></svg></div>
+      <div class="empty-txt">Оберіть аптеку</div>
+      <div class="empty-hint">Перейдіть до вкладки Аптеки та оберіть аптеку зі списку</div>
+      <button class="goto-btn" onclick="setTab('pharmacies')">→ Перейти до Аптек</button>`;
+    emptyEl.style.display='flex';
+    mainEl.style.display='none';
+    return;
+  }
+  if(!o.i.length){
+    emptyEl.innerHTML=`
+      <div class="empty-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <div class="empty-txt">Немає обладнання</div>
+      <div class="empty-hint">В цій аптеці ще не встановлено<br>QR-обладнання</div>`;
+    emptyEl.style.display='flex';
+    mainEl.style.display='none';
+    S.carIdx=0;
+    return;
+  }
+  emptyEl.style.display='none';
+  mainEl.style.display='flex';
+
   const items=o.i;
   S.carIdx=Math.min(S.carIdx,items.length-1);
   const idx=S.carIdx;
