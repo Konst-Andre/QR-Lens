@@ -59,6 +59,8 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body,#app{touch-action:pan-x pan-y}
+/* Batch 17 IOS-TEXT-AUTOFIT-FIX: блокуємо iOS Safari auto text scaling (підвищується при double-tap на короткий текст з inline-em) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* Batch 8i PWA-SPLASH-FIX: html background fallback на dark/light до load CSS (миттєвий фон під час PWA splash) */
 html{background:#0d1117}
 @media(prefers-color-scheme:light){html{background:#f7f4ec}}
@@ -66,6 +68,8 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 *{-webkit-tap-highlight-color:transparent}
 .brand,.app-bar,.timestamp,.ctx-layer,.bottom-nav{-webkit-user-select:none;user-select:none;touch-action:manipulation}
+/* Batch 17 BRAND-NO-TOUCH: .brand display-only (нема onclick) → pointer-events:none остаточно блокує double-tap text autofit на iOS, який не покривався самим touch-action:manipulation через inline <em> child */
+.brand{pointer-events:none}
 button:disabled{touch-action:none;pointer-events:none}
 input,select,textarea{font-size:16px!important;font-family:inherit}
 button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
@@ -1211,7 +1215,22 @@ document.getElementById('srBtn').addEventListener('click',()=>{
   openSheet('sh-sr',()=>closeSheet('sh-sr'));
 });
 function selSR(i){S.sr=i;S.outlet=null;S.carIdx=0;S.phSrch='';S.fNet='all';S.fCity='all';S.fSt=[];S.eqSrch='';S.eqFBrand='all';S.eqFSt=[];document.getElementById('ph-srch-inp').value='';document.getElementById('eq-srch-inp').value='';closeSheet('sh-sr');render();}
-function selectOutlet(i){S.outlet=i;if(S.tab==='qr'||S.tab==='equipment')S.carIdx=0;render();}
+function selectOutlet(i){
+  S.outlet=i;
+  // Batch 17 OUTLET-CLOSE-RESET: при закритті аптеки (× на ph-banner → selectOutlet(null))
+  // скидаємо фільтри обладнання, бо вони могли бути виставлені через ctaToEquip()
+  // з Top/Focus chips в Tab 1. Інтуїтивна логіка: "закрив аптеку → повернувся до загального списку".
+  // Працює для обох flow (Top + Focus) бо обидва йдуть через один ctaToEquip.
+  if(i===null){
+    S.eqFSt=[];
+    S.eqFBrand='all';
+    S.eqSrch='';
+    const _ei=document.getElementById('eq-srch-inp');
+    if(_ei)_ei.value='';
+  }
+  if(S.tab==='qr'||S.tab==='equipment')S.carIdx=0;
+  render();
+}
 
 // ── PH FILTER ──
 document.getElementById('ph-flt-btn').addEventListener('click',openPhFlt);
