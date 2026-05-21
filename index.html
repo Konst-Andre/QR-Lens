@@ -65,7 +65,7 @@ html{background:#0d1117}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--card)}
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 *{-webkit-tap-highlight-color:transparent}
-.brand,.app-bar,.timestamp,.ctx-layer,.bottom-nav{-webkit-user-select:none;user-select:none}
+.brand,.app-bar,.timestamp,.ctx-layer,.bottom-nav{-webkit-user-select:none;user-select:none;touch-action:manipulation}
 button:disabled{touch-action:none;pointer-events:none}
 input,select,textarea{font-size:16px!important;font-family:inherit}
 button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
@@ -76,7 +76,7 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 .app-bar.scrolled{box-shadow:var(--sh2)}
 .bar-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
 .brand{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--ink);flex-shrink:0;line-height:1}
-.brand em{color:var(--accent);font-style:normal;font-size:20px;vertical-align:middle;line-height:0}
+.brand em{color:var(--accent);font-style:normal}
 [data-theme="dark"] .brand em{color:#6DD8D0}
 .sr-pill{flex:1 1 auto;max-width:240px;display:flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 5px;color:var(--ink);font-size:13px;font-weight:600;min-width:0;transition:background .12s;cursor:pointer}
 .sr-pill:active{background:var(--border)}
@@ -205,13 +205,16 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 .prob-addr{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prob-meta{font-size:10px;color:var(--muted);margin-top:2px}
 .prob-cnt{font-size:12px;font-weight:700;flex-shrink:0}
+/* Batch 16 TAB1-PAIR-A-ASYMMETRY: Top-card units block (icon+number) */
+.card-units{display:flex;align-items:center;gap:5px;flex-shrink:0;color:var(--ink-2);font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.card-units svg{opacity:.55}
 /* ============ Batch 15 TAB1-CHIP-PAIR ============ */
 .chip-pair{display:flex;gap:8px;margin-bottom:10px}
 .chip-pair-it{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--card);color:var(--ink-2);font-size:12px;font-weight:700;cursor:pointer;transition:all .12s;box-shadow:var(--sh1)}
 .chip-pair-it:active{background:var(--bg-soft)}
 .chip-pair-it.act{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .chip-pair-it .cp-ico{display:flex;align-items:center}
-.chip-pair-it .cp-cnt{font-size:11px;font-weight:700;opacity:.7;margin-left:2px}
+.chip-pair-it .cp-cnt{font-size:13px;font-weight:800;opacity:1;margin-left:5px;color:inherit;font-variant-numeric:tabular-nums}
 /* ============ Batch 15 TAB1-OUTLET-CTA ============ */
 .cta-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:13px 14px;border-radius:var(--rs);border:1px solid var(--border);background:var(--card);color:var(--ink);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;box-shadow:var(--sh1);margin-bottom:10px;font-family:inherit}
 .cta-btn:active{background:var(--card-2);border-color:var(--border-2)}
@@ -681,6 +684,7 @@ function renderOverview(){
   // 2 списки — TOP (за обладнанням) і Фокус (потребують уваги)
   const topList = d.o
     .map((o,i)=>({...o,idx:i}))
+    .filter(o => o.i.length > 0)
     .sort((a,b)=>{
       const lenDiff = b.i.length - a.i.length;
       if(lenDiff!==0) return lenDiff;
@@ -694,20 +698,31 @@ function renderOverview(){
     .sort((a,b)=>b.w2-a.w2)
     .slice(0,5);
 
-  // Спільний row pattern (Batch 13 PROB-NUM-NEUTRAL: дефолтний нейтральний)
-  const renderRow = (o,i) => `
-    <div class="prob-row" onclick="selectOutlet(${o.idx})">
+  // Batch 16 TAB1-PAIR-A-ASYMMETRY: eqIco/flagIco moved here (use both in chips AND in renderRow)
+  // Equipment icon для chip TOP та Top-card units block
+  const eqIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+  // Flag icon для chip Фокус (watchlist/marker — не bookmark, не target)
+  const flagIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+
+  // Batch 16 RENDER-ROW-ASYMMETRIC: mode='top' → eqIco+N | mode='focus' → status dots
+  // Архітектурно: Tab 1 = preview/dashboard (унікальний візуальний словник), на відміну від Tab 2/4 (working spaces з 'N + од.' патерном)
+  const renderRow = (o, i, mode) => {
+    const rightBlock = mode === 'top'
+      ? `<div class="card-units" style="margin:0 0 0 auto">${eqIco}<span>${o.i.length}</span></div>`
+      : `<div class="ph-card-dots" style="margin:0 0 0 auto;flex-shrink:0;gap:8px">${[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}].filter(x=>x.v>0).map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`).join('')}</div>`;
+    return `<div class="prob-row" onclick="selectOutlet(${o.idx})">
       <div class="prob-num">${i+1}</div>
       <div class="prob-info">
         <div class="prob-addr">${o.a}</div>
         <div class="prob-meta">${o.net||o.city||''}</div>
       </div>
-      <div class="ph-card-dots" style="margin:0 0 0 auto;flex-shrink:0;gap:8px">${[{v:o.ok,st:'ok'},{v:o.w,st:'warn'},{v:o.l,st:'late'},{v:o.c,st:'crit'}].filter(x=>x.v>0).map(x=>`<div class="ph-dot-it"><div class="ph-dot" style="background:var(--${x.st})"></div><span style="color:var(--${x.st})">${x.v}</span></div>`).join('')}</div>
+      ${rightBlock}
     </div>`;
+  };
 
   const activeList = S.tab1Mode==='top' ? topList : focusList;
   const listHTML = activeList.length
-    ? activeList.map((o,i)=>renderRow(o,i)).join('')
+    ? activeList.map((o,i)=>renderRow(o,i,S.tab1Mode)).join('')
     : (S.tab1Mode==='focus'
         ? `<div style="padding:16px 0;color:var(--ok);font-size:13px;font-weight:600;text-align:center">Все відскановано вчасно</div>`
         : `<div style="padding:16px 0;color:var(--muted);font-size:13px;text-align:center">Немає даних</div>`);
@@ -718,11 +733,6 @@ function renderOverview(){
   const typeCount = new Set(d.o.flatMap(o=>o.i.map(it=>it.pos))).size;
   const cityW = cityCount===1?'місті':'містах';
   const apothW = critPhC===1?'аптеці':'аптеках';
-
-  // Equipment icon для chip TOP (canonical — той самий, що в ov-tile "Одиниць")
-  const eqIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
-  // Flag icon для chip Фокус (watchlist/marker — не bookmark, не target)
-  const flagIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
 
   const focusCount = focusList.length;
 
