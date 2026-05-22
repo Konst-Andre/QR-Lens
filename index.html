@@ -134,7 +134,7 @@ html.pwa-full .nav-i{padding-top:8px;padding-bottom:calc(8px + var(--sab))}
 .sec-t{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .h16{height:16px}
 /* Batch 14 EMPTY-STATE-V2: vertical centering (justify-content+min-height) + збільшені пропорції — уніфіковано на Tab 1/3/4, PWA/Safari */
-.empty-state{padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:55vh}
+.empty-state{padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:55dvh}
 .empty-ico{width:76px;height:76px;background:var(--bg-soft);border-radius:50%;display:flex;align-items:center;justify-content:center}
 .empty-txt{font-size:15px;font-weight:600;color:var(--muted)}
 .empty-hint{font-size:13px;color:var(--muted-2);line-height:1.55}
@@ -188,7 +188,7 @@ body.tab4-fused #ctx-layer{background:var(--bg-soft);border-top:1px dashed var(-
 /* GUID styled container */
 .guid-box{display:flex;align-items:center;gap:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rxs);padding:5px 10px;width:100%;max-width:300px}
 /* Batch 8i GUID-TYPOGRAPHY: font 9→12px + letter-spacing 0.5px (текст займав ~30% висоти контейнера — диспропорція; padding не чіпаємо) */
-.guid-text{font-size:12px;letter-spacing:0.5px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
+.guid-text{font-size:10px;letter-spacing:0.3px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;flex:1;text-align:center}
 /* QR count badge */
 .qr-count-badge{background:var(--bg-soft);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted)}
 /* MINI BAR */
@@ -324,7 +324,7 @@ body.tight-vh .qr-wrap{padding:10px}
 body.tight-vh .qr-wrap canvas,body.tight-vh .qr-wrap img{width:200px!important;height:200px!important}
 body.tight-vh .qr-badge{padding:3px 8px;font-size:10px}
 body.tight-vh .qr-count-badge{font-size:10px;padding:2px 8px}
-body.tight-vh .guid-text{font-size:10px;letter-spacing:0.3px}
+/* Batch 20 GUID-FIX: tight-vh .guid-text override removed — base now 10px/0.3 letter-spacing always */
 /* Batch 8i PWA-ROOMY-VH: при vh>790 (PWA + Safari toolbar OFF на iPhone 13/14/15 Pro+) — luxury режим з QR 260×260, name 20px, gap 12px. */
 body.roomy-vh .qr-wrap canvas,body.roomy-vh .qr-wrap img{width:260px!important;height:260px!important}
 body.roomy-vh .qr-wrap{padding:16px}
@@ -346,7 +346,7 @@ body.roomy-vh .qr-area{gap:12px}
 /* SHEETS */
 .sh-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:flex-end}
 .sh-bg.open{display:flex}
-.sh-box{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + var(--sab));box-shadow:0 -4px 20px rgba(0,0,0,.10)}
+.sh-box{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-height:85dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -4px 20px rgba(0,0,0,.10)}
 .sh-grip-w{padding:10px 0 4px;display:flex;justify-content:center;cursor:grab;flex-shrink:0}
 .sh-grip{width:36px;height:4px;background:var(--border-2);border-radius:2px}
 .sh-head{display:flex;justify-content:space-between;align-items:center;padding:0 16px 10px;border-bottom:1px solid var(--border)}
@@ -383,6 +383,29 @@ body.roomy-vh .qr-area{gap:12px}
 .chip-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;flex-shrink:0}
 /* Batch 9.2: .eq-item sub-label CSS видалено — outlet mode переїхав на .eq-card v2 */
 /* Batch 9: .eq-card mini-bar / chevron rules переїхали в EQ-CARD-V2 блок */
+
+/* Batch 21 ORIENTATION-LOCK: iOS не дає реальний lock через manifest "orientation":"portrait" (ігнорується),
+   тож CSS overlay при landscape — стандарт преміум PWA коли native API недоступний.
+   max-width:900px виключає планшети-у-landscape (там layout природно адаптується). */
+@media (orientation:landscape) and (max-width:900px){
+  body{overflow:hidden}
+  #app{display:none !important}
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:9999;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  body::after{
+    content:"Поверніть телефон вертикально";
+    position:fixed;inset:0;z-index:10000;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink);
+    font-size:17px;font-weight:600;text-align:center;
+    padding:32px;letter-spacing:-0.2px;line-height:1.4;
+    pointer-events:none;
+  }
+}
 
 </style>
 </head>
@@ -509,7 +532,6 @@ body.roomy-vh .qr-area{gap:12px}
     <div class="sh-sec">Місто</div><div class="chip-row" id="sh-flt-cities"></div>
     <div class="sh-sec">Статус</div><div class="chip-row" id="sh-flt-status"></div>
     <button class="sh-reset" onclick="resetFlt()">Скинути фільтри</button>
-    <div style="height:8px"></div>
   </div>
 </div>
 
@@ -519,7 +541,6 @@ body.roomy-vh .qr-area{gap:12px}
     <div class="sh-grip-w"><div class="sh-grip"></div></div>
     <div class="sh-head"><span class="sh-title" id="sh-eq-title">Обладнання</span><button class="sh-x" onclick="closeSheet('sh-eq')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div id="sh-eq-list"></div>
-    <div style="height:8px"></div>
   </div>
 </div>
 
@@ -531,7 +552,6 @@ body.roomy-vh .qr-area{gap:12px}
     <div class="sh-sec">Бренд</div><div class="chip-row" id="sh-eq-brands"></div>
     <div class="sh-sec">Критичність</div><div class="chip-row" id="sh-eq-status"></div>
     <button class="sh-reset" onclick="resetEqFlt()">Скинути фільтри</button>
-    <div style="height:8px"></div>
   </div>
 </div>
 
@@ -978,29 +998,56 @@ function setupSwipe(){
 // ── TAB 4: EQUIPMENT ──
 let _eqTypes=[];
 
-// Batch 9 EQ-BRAND-PARSE: визначення бренду з назви обладнання
-// (Generic — whitelist; Contex → Durex group (Sexual Wellness); інакше includes)
+// Batch 21 EQ-BRAND-V2: explicit KPK order + Nurofen split (C&F, Adult, Kids).
+// Замінює Batch 9 (group→alpha) на детальний porядок як у КПК торгпреда:
+// Strepsils → Nurofen C&F → Nurofen → Nurofen Kids → Gaviscon → Evitest → Durex → інше
 const EQ_GENERIC_WL = ['ANC tray','Getty','LBox','LBoxMini','OtcKopiykaFrame','POS Name','Undefined'];
-const EQ_BRANDS_ORDERED = ['Nurofen','Strepsils','Gaviscon','Durex','Evitest','Solomia','Veet','Dettol'];
+const EQ_BRAND_ORDER = [
+  'Strepsils',     // 0
+  'Nurofen C&F',   // 1 — Cold & Flu (підкатегорія Nurofen)
+  'Nurofen',       // 2 — дорослий (без C&F, без Kids)
+  'Nurofen Kids',  // 3 — дитячий (ForChildren)
+  'Gaviscon',      // 4
+  'Evitest',       // 5
+  'Durex',         // 6 — включаючи Contex (Sexual Wellness group)
+  'Solomia',       // 7
+  'Veet',          // 8
+  'Dettol',        // 9
+  'Generic'        // 10
+];
 function eqBrand(pos){
   if(EQ_GENERIC_WL.includes(pos))return'Generic';
-  if(/^Contex/i.test(pos))return'Durex'; // Contex належить до Durex group (Sexual Wellness)
+  if(/^Contex/i.test(pos))return'Durex';
+  // Nurofen variants — перевіряємо ПЕРШИМ (specific перед загальним match)
+  if(/Nurofen/i.test(pos)){
+    if(/C&F|Cold/i.test(pos))return'Nurofen C&F';
+    if(/ForChildren|Children|Kids/i.test(pos))return'Nurofen Kids';
+    return'Nurofen';
+  }
   const p=pos.toLowerCase();
-  for(const b of EQ_BRANDS_ORDERED){
+  for(const b of ['Strepsils','Gaviscon','Evitest','Durex','Solomia','Veet','Dettol']){
     if(p.includes(b.toLowerCase()))return b;
   }
   return'Generic';
 }
-
-// Batch 9 EQ-BRAND-GROUP: 4 групи для default sort
-// drug=ліки → wellness=тести/sexual → other=інше → generic=універсальне
-const EQ_BRAND_GROUP = {
-  Nurofen:'drug', Strepsils:'drug', Gaviscon:'drug',
-  Evitest:'wellness', Durex:'wellness',
-  Solomia:'other', Veet:'other', Dettol:'other',
-  Generic:'generic'
-};
-const EQ_GROUP_ORDER = {drug:0, wellness:1, other:2, generic:3};
+function eqBrandOrder(brand){
+  const i=EQ_BRAND_ORDER.indexOf(brand);
+  return i<0?999:i;
+}
+// Batch 21 EQ-SORT-HELPER: єдина точка sort для items у вибраній аптеці.
+// Викликається in-place з selectOutlet → o.i стає sorted для ВСІХ рендерів
+// (renderQR carousel, renderEquipment outlet expand, goToQR findIndex).
+// Sort: KPK brand order → alpha pos → worst-first within pos.
+function sortItemsByBrand(items){
+  items.sort((a,b)=>{
+    const oa=eqBrandOrder(eqBrand(a.pos)), ob=eqBrandOrder(eqBrand(b.pos));
+    if(oa!==ob)return oa-ob;
+    const pc=a.pos.localeCompare(b.pos,'uk');
+    if(pc!==0)return pc;
+    const SO={crit:0,late:1,warn:2,ok:3};
+    return SO[a.st]-SO[b.st];
+  });
+}
 
 // Batch 9 EQ-CATEGORY-V2: розширена мапа категорій
 function eqCategory(pos){
@@ -1037,13 +1084,13 @@ function getEqTypes(d){
       if(!t.outs.find(x=>x.idx===oi))t.outs.push({idx:oi,a:o.a,net:o.net});
     }
   }
-  // Batch 9 EQ-SORT: brand-group → alpha within group (НЕ за tot)
+  // Batch 21 EQ-SORT-V2: explicit KPK brand order → alpha within brand (заміна Batch 9 group→alpha)
   return Object.entries(types).map(([pos,v])=>{
     const br=eqBrand(pos);
-    return {pos,...v,brand:br,grp:EQ_BRAND_GROUP[br]||'generic',cat:eqCategory(pos),worst:eqWorst(v)};
+    return {pos,...v,brand:br,cat:eqCategory(pos),worst:eqWorst(v)};
   }).sort((a,b)=>{
-    const ga=EQ_GROUP_ORDER[a.grp], gb=EQ_GROUP_ORDER[b.grp];
-    if(ga!==gb)return ga-gb;
+    const oa=eqBrandOrder(a.brand), ob=eqBrandOrder(b.brand);
+    if(oa!==ob)return oa-ob;
     return a.pos.localeCompare(b.pos,'uk');
   });
 }
@@ -1104,18 +1151,9 @@ function renderEquipment(){
       </div>`;
       return;
     }
-    // Batch 10 EQ-OUTLET-EXPAND: 1 картка = 1 QR код. Sort: brand-group → alpha pos → worst-first within pos.
-    // Secondary line = QR ID 13 chars (monospace) — заміна категорії, яка дублювала назву типу.
-    const items=o.i.slice().sort((a,b)=>{
-      const brA=eqBrand(a.pos), brB=eqBrand(b.pos);
-      const ga=EQ_GROUP_ORDER[EQ_BRAND_GROUP[brA]||'generic'];
-      const gb=EQ_GROUP_ORDER[EQ_BRAND_GROUP[brB]||'generic'];
-      if(ga!==gb)return ga-gb;
-      const pc=a.pos.localeCompare(b.pos,'uk');
-      if(pc!==0)return pc;
-      const SO={crit:0,late:1,warn:2,ok:3};
-      return SO[a.st]-SO[b.st];
-    });
+    // Batch 21 EQ-SORT: o.i вже sorted з selectOutlet (sortItemsByBrand in-place).
+    // Раніше тут був окремий sort — видалено для уникнення дубль-логіки.
+    const items=o.i;
     document.getElementById('eq-list').innerHTML=`<div class="eq-cards">`+items.map(it=>{
       // Batch 10b: QR ID 13 chars (формат XXXXXXXX-XXXX — перші 2 групи GUID з дашем)
       const shortQR=it.qr.replace(/[{}]/g,'').slice(0,13);
@@ -1222,6 +1260,13 @@ document.getElementById('srBtn').addEventListener('click',()=>{
 function selSR(i){S.sr=i;S.outlet=null;S.carIdx=0;S.phSrch='';S.fNet='all';S.fCity='all';S.fSt=[];S.eqSrch='';S.eqFBrand='all';S.eqFSt=[];document.getElementById('ph-srch-inp').value='';document.getElementById('eq-srch-inp').value='';closeSheet('sh-sr');render();}
 function selectOutlet(i){
   S.outlet=i;
+  // Batch 21 OUTLET-SORT-ITEMS: in-place sort o.i при виборі аптеки.
+  // Один sort покриває всі рендери (renderQR carousel, renderEquipment outlet, goToQR).
+  // S.carIdx 0 — після sort перший item = найвищий пріоритет за КПК (Strepsils, якщо є).
+  if(i!==null){
+    const _d=sr(), _o=_d&&_d.o[i];
+    if(_o&&Array.isArray(_o.i)&&_o.i.length>1)sortItemsByBrand(_o.i);
+  }
   // Batch 17 OUTLET-CLOSE-RESET: при закритті аптеки (× на ph-banner → selectOutlet(null))
   // скидаємо фільтри обладнання, бо вони могли бути виставлені через ctaToEquip()
   // з Top/Focus chips в Tab 1. Інтуїтивна логіка: "закрив аптеку → повернувся до загального списку".
@@ -1262,12 +1307,9 @@ function resetFlt(){S.fNet='all';S.fCity='all';S.fSt=[];renderPharmacies();close
 // ── Batch 9 EQ FILTER ──
 document.getElementById('eq-flt-btn').addEventListener('click',openEqFlt);
 function openEqFlt(){
-  // Бренди — з реально присутніх у поточному SR (порядок: drug→wellness→other→generic, alpha)
+  // Batch 21: бренди в порядку КПК (Strepsils → Nurofen variants → Gaviscon → Evitest → Durex → інше)
   const present=[...new Set(_eqTypes.map(t=>t.brand))].sort((a,b)=>{
-    const ga=EQ_GROUP_ORDER[EQ_BRAND_GROUP[a]||'generic'];
-    const gb=EQ_GROUP_ORDER[EQ_BRAND_GROUP[b]||'generic'];
-    if(ga!==gb)return ga-gb;
-    return a.localeCompare(b);
+    return eqBrandOrder(a)-eqBrandOrder(b);
   });
   document.getElementById('sh-eq-brands').innerHTML=
     ['all',...present].map(b=>`<div class="chip${S.eqFBrand===b?' on':''}" onclick="setEqFBrand('${b.replace(/'/g,"\\'")}')">${b==='all'?'Всі бренди':b}</div>`).join('');
