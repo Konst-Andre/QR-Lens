@@ -1,14 +1,32 @@
 <!DOCTYPE html>
-<html lang="uk" data-theme="dark">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QR Lens">
-<!-- Batch 8i PWA-SPLASH-FIX: theme-color для switcher between iOS dark/light splash + усуває білий flash при відкритті PWA -->
-<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme:dark)">
-<meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme:light)">
+<!-- Batch 24: theme-color (dynamic) — оновлюється inline script нижче і toggle JS. Default dark для PWA splash. -->
+<meta name="theme-color" content="#0d1117">
+<!-- Batch 24: FOUC fix — встановити data-theme ДО CSS apply і first paint. iOS 18+ listener додано в body JS. -->
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('qr-theme');           // null|'auto'|'light'|'dark'
+      var mode  = saved || 'auto';
+      var dark  = mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme:dark)').matches);
+      var html  = document.documentElement;
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      html.setAttribute('data-theme-mode', mode);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = dark ? '#0d1117' : '#f7f4ec';
+    } catch(e) {
+      // Fallback: localStorage заблоковано / private mode → залишити default
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.setAttribute('data-theme-mode', 'auto');
+    }
+  })();
+</script>
 <title>QR Lens</title>
 <!-- Batch 23: PWA manifest + iOS/Android icons. ?v=batchNN — cache-busting, інкрементувати при зміні іконок -->
 <link rel="manifest" href="manifest.json?v=batch23">
@@ -67,9 +85,8 @@
 html,body,#app{touch-action:pan-x pan-y}
 /* Batch 17 IOS-TEXT-AUTOFIT-FIX: блокуємо iOS Safari auto text scaling (підвищується при double-tap на короткий текст з inline-em) */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-/* Batch 8i PWA-SPLASH-FIX: html background fallback на dark/light до load CSS (миттєвий фон під час PWA splash) */
-html{background:#0d1117}
-@media(prefers-color-scheme:light){html{background:#f7f4ec}}
+/* Batch 24: html background через CSS var — correctly follows data-theme (set by FOUC inline script in <head>). Замінює media-only fallback. */
+html{background:var(--bg)}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--card)}
 body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 *{-webkit-tap-highlight-color:transparent}
@@ -109,6 +126,23 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
 [data-theme="light"] .th-svg .th-moon{opacity:0}
 [data-theme="dark"] .th-svg .th-sun{opacity:0}
 [data-theme="dark"] .th-svg .th-moon{opacity:1}
+/* Batch 24: Theme dropdown menu (3-state auto/light/dark) */
+.theme-wrap{position:relative;flex-shrink:0}
+.theme-menu{position:absolute;top:calc(100% + 6px);right:0;min-width:160px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);box-shadow:var(--sh2);padding:4px;z-index:200;animation:tm-in .12s ease-out}
+.theme-menu[hidden]{display:none}
+@keyframes tm-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+/* Batch 24.1: Accessibility — респектуємо системне reduce motion */
+@media (prefers-reduced-motion: reduce){.theme-menu{animation:none}}
+/* Batch 24.1: Transition prevention при init applyTheme — без fade на launch */
+.no-transition,.no-transition *{transition:none !important}
+.theme-item{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border-radius:var(--rxs);font-size:13px;color:var(--ink);text-align:left;transition:background .1s;cursor:pointer}
+.theme-item:active{background:var(--bg-soft)}
+.theme-item .ti-icon{flex-shrink:0;color:var(--ink-2)}
+.theme-item .ti-label{flex:1}
+.theme-item .ti-check{flex-shrink:0;color:var(--accent);opacity:0;transition:opacity .1s}
+.theme-item.active{color:var(--accent);font-weight:600}
+.theme-item.active .ti-icon{color:var(--accent)}
+.theme-item.active .ti-check{opacity:1}
 .chev-ico{color:var(--muted);flex-shrink:0}
 .timestamp{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0;animation:livePulse 2s ease-in-out infinite}
@@ -425,13 +459,39 @@ body.roomy-vh .qr-area{gap:12px}
         <span class="sr-nm" id="srNm">Бутуліна Владислава</span>
         <svg class="chev-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <button class="icon-btn" id="btnTheme" aria-label="Тема">
-        <!-- Batch 8h THEME-TOGGLE-V2: SVG з обома paths (sun + moon), перемикання через CSS opacity transitions -->
-        <svg class="th-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <g class="th-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
-          <g class="th-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g>
-        </svg>
-      </button>
+      <!-- Batch 24: Theme button + 3-state dropdown (auto/light/dark) -->
+      <div class="theme-wrap">
+        <button class="icon-btn" id="btnTheme" aria-label="Тема" aria-haspopup="true" aria-expanded="false">
+          <!-- Batch 8h THEME-TOGGLE-V2: SVG з обома paths (sun + moon), перемикання через CSS opacity transitions -->
+          <svg class="th-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <g class="th-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
+            <g class="th-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g>
+          </svg>
+        </button>
+        <div class="theme-menu" id="themeMenu" role="menu" hidden>
+          <button class="theme-item" data-mode="auto" role="menuitemradio">
+            <svg class="ti-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor" stroke="none"/>
+            </svg>
+            <span class="ti-label">Авто</span>
+            <svg class="ti-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <button class="theme-item" data-mode="light" role="menuitemradio">
+            <svg class="ti-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <span class="ti-label">Світла</span>
+            <svg class="ti-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <button class="theme-item" data-mode="dark" role="menuitemradio">
+            <svg class="ti-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="ti-label">Темна</span>
+            <svg class="ti-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="timestamp">
       <span class="live-dot"></span>
@@ -1415,14 +1475,75 @@ document.getElementById('ph-srch-inp').addEventListener('input',e=>{S.phSrch=e.t
 // Batch 9 EQ-SRCH
 document.getElementById('eq-srch-inp').addEventListener('input',e=>{S.eqSrch=e.target.value;renderEquipment();});
 
-// ── THEME ──
-// Batch 8h THEME-TOGGLE-V2: CSS-driven cross-fade — updThIco видалено (більше не потрібен path swap)
-function isDark(){
-  const t=document.documentElement.getAttribute('data-theme');
-  return t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);
+// ── THEME (Batch 24) ──
+// 3-state: auto/light/dark. localStorage persist, FOUC fix у <head>, iOS 18+ live system listener.
+const THEME_KEY = 'qr-theme';
+function getThemeMode(){
+  try { return localStorage.getItem(THEME_KEY) || 'auto'; }
+  catch(e){ return 'auto'; }
 }
-document.getElementById('btnTheme').addEventListener('click',()=>{
-  document.documentElement.setAttribute('data-theme',isDark()?'light':'dark');
+function applyTheme(){
+  const mode = getThemeMode();
+  const sysDark = matchMedia('(prefers-color-scheme:dark)').matches;
+  const dark = mode === 'dark' || (mode === 'auto' && sysDark);
+  const html = document.documentElement;
+  html.setAttribute('data-theme', dark ? 'dark' : 'light');
+  html.setAttribute('data-theme-mode', mode);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = dark ? '#0d1117' : '#f7f4ec';
+  document.querySelectorAll('.theme-item').forEach(it => {
+    it.classList.toggle('active', it.dataset.mode === mode);
+  });
+  const lbl = mode === 'auto' ? 'Авто' : mode === 'dark' ? 'Темна' : 'Світла';
+  document.getElementById('btnTheme').setAttribute('aria-label', 'Тема: ' + lbl);
+}
+function setThemeMode(mode){
+  try {
+    if (mode === 'auto') localStorage.removeItem(THEME_KEY);
+    else localStorage.setItem(THEME_KEY, mode);
+  } catch(e) { /* private mode → не persist, але apply */ }
+  applyTheme();
+}
+// Batch 24.1: prevent transition fade на launch (CSS vars змінюються при applyTheme)
+document.documentElement.classList.add('no-transition');
+applyTheme();
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove('no-transition');
+  });
+});
+// System listener — iOS 18+ (Apple fixed PWA bug у iOS 18, iOS 15-17 потребує reload PWA)
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => {
+  if (getThemeMode() === 'auto') applyTheme();
+});
+// Batch 24.1: Multi-window sync — користувач змінив тему в Safari tab → PWA на home screen теж оновиться
+window.addEventListener('storage', (e) => {
+  if (e.key === THEME_KEY) applyTheme();
+});
+// btnTheme: toggle dropdown
+const btnTheme  = document.getElementById('btnTheme');
+const themeMenu = document.getElementById('themeMenu');
+btnTheme.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const opening = themeMenu.hidden;
+  themeMenu.hidden = !opening;
+  btnTheme.setAttribute('aria-expanded', String(opening));
+});
+// Item click → set mode + close
+document.querySelectorAll('.theme-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setThemeMode(item.dataset.mode);
+    themeMenu.hidden = true;
+    btnTheme.setAttribute('aria-expanded', 'false');
+  });
+});
+// Click outside → close
+document.addEventListener('click', (e) => {
+  if (!themeMenu.hidden && !themeMenu.contains(e.target) && !btnTheme.contains(e.target)){
+    themeMenu.hidden = true;
+    btnTheme.setAttribute('aria-expanded', 'false');
+  }
 });
 
 // ── IOS ──
